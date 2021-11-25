@@ -1,7 +1,9 @@
 # This is a sample Python script.
 import json
-from gameloop import Gameloop
 
+from pyglet import font
+
+from gameloop import Gameloop
 
 def print_hi(name: str):
     return name
@@ -17,5 +19,5 @@ if __name__ == '__main__':
     settings: dict = lode_settings()
 
     gameloop = Gameloop(settings.get("window_width"), settings.get("window_height"))
-    gameloop.setup()
+    gameloop.setup("Space Invaders")
     gameloop.run()
