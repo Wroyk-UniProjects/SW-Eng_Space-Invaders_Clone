@@ -1,8 +1,19 @@
+import numpy as np
+
+
 class Hitbox:
+    # X and Y positions
     pos_x = 0
     pos_y = 0
-    x_width = 25
-    y_height = 25
+
+    # it's a zero square.
+    size = 0
+
+    # class initialisation
+    def __init__(self, pos_x, pos_y, size):
+        self.pos_x = pos_x
+        self.pos_y = pos_y
+        self.size = size
 
     def set_pos_x(self, posx):
         self.pos_x = posx
@@ -10,23 +21,24 @@ class Hitbox:
     def set_pos_y(self, posy):
         self.pos_y = posy
 
-    def set_position(self, posx, posy):
+    def set_hitbox_position(self, posx, posy):
         self.pos_x = posx
         self.pos_y = posy
 
-    def get_position(self):
-        return self.pos_x,self.pos_y
+    def get_hitbox_position(self):
+        return self.pos_x, self.pos_y
 
-    def set_size_hitbox(self, length, height):
-        self.x_width = length
-        self.y_height = height
+    def set_hitbox_size(self, size):
+        self.size = size
 
     def get_size_hitbox(self):
-        return self.x_width,self.y_height
+        return self.size
 
-    # not functional yet
-    def detect_collision(self, other_obj: "Hitbox"):
-        if self.pos_x == other_obj.pos_x and self.pos_y == other_obj.pos_x:
-            print("collision detected!")
-        elif self.pos_x + self.x_width == other_obj.pos_x + other_obj.x_width and self.pos_y + self.y_height == other_obj.pos_x + other_obj.y_height:
-            print("collision detected!")
+    # almost works, still buggy though
+    def is_touching(self, other_obj: "hitbox"):
+        # this is a comparison between a vector normalization and the sum of objects sizes
+        if np.linalg.norm(np.array([self.pos_x, self.pos_y]) - np.array([other_obj.pos_x, other_obj.pos_y])) < (
+                self.size + other_obj.size):
+            return True
+        else:
+            return False
