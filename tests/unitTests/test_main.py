@@ -1,6 +1,8 @@
+import pytest
 import main
 
 
 class TestMain:
     def test_print_hi(self):
-        assert main.print_hi("hallo") == 4
+        text = "hallo"
+        assert main.print_hi(text) == text
