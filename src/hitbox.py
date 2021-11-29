@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 
 class Hitbox:
@@ -37,8 +38,44 @@ class Hitbox:
     # almost works, still buggy though
     def is_touching(self, other_obj: "hitbox"):
         # this is a comparison between a vector normalization and the sum of objects sizes
-        if np.linalg.norm(np.array([self.pos_x, self.pos_y]) - np.array([other_obj.pos_x, other_obj.pos_y])) < (
+        if np.linalg.norm(np.array([self.pos_x, self.pos_y]) - np.array([other_obj.pos_x, other_obj.pos_y])) <= (
                 self.size + other_obj.size):
             return True
         else:
             return False
+
+##################################################################################################
+
+    def magnitude(self, v):
+        return math.sqrt(sum(v[i] * v[i] for i in range(len(v))))
+
+    def add(self, u, v):
+        return [u[i] + v[i] for i in range(len(u))]
+
+    def sub(self, u, v):
+        return [u[i] - v[i] for i in range(len(u))]
+
+    def normalize(self, v):
+        return [v[i] / self.magnitude(v) for i in range(len(v))]
+
+    def check_collide(self, other_obj: "hitbox"):
+        vec_h1 = np.array([self.pos_x, self.pos_y])
+        vec_h2 = np.array([other_obj.pos_x, other_obj.pos_y])
+        print(vec_h1)
+        print(vec_h2)
+
+        print("\n")
+
+        print(np.array([self.pos_x, self.pos_y]) - np.array([other_obj.pos_x, other_obj.pos_y]))
+        print(str(round(np.linalg.norm(np.array([self.pos_x, self.pos_y]) - np.array([other_obj.pos_x, other_obj.pos_y])),0)))
+        print(self.size + other_obj.size)
+
+        if round(np.linalg.norm(np.array([self.pos_x, self.pos_y]) - np.array([other_obj.pos_x, other_obj.pos_y])),0) < (
+                self.size + other_obj.size):
+            print("true")
+        else:
+            print("false")
+
+        #norm = self.normalize(vec_h1,vec_h2)
+
+        #print("Normalization: " + str(norm))
