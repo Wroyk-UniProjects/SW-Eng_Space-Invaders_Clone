@@ -1,4 +1,5 @@
-import hitbox.py
+from hitbox import Hitbox
+
 
 class projectiles(object, Hitbox):
     direction = 0   # 10 is up, -10 is down. Could be implemented differently...
