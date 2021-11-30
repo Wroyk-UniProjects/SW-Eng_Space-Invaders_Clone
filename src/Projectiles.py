@@ -9,18 +9,15 @@ class Projectiles(GameObject, Hitbox):
 
     def __init__(self, x, y, length, width, velo):
         super(Projectiles, self).__init__(x, y, length, width)
-        self.start_moving(velo)
-
-    def start_moving(self, velo):
-        self.velocity = velo
-        while True:
-            self.set_hitbox_position(self.pos_x, self.pos_y + self.velocity)
-            if self.is_touching():
-                self.__del__()
-                # Also delete hit object
+        self.update(velo)
 
     def draw(self):
         pass
 
-    def update(self, dt):
-        pass
+    def update(self, velo):
+        self.velocity = velo
+        self.set_hitbox_position(self.pos_x, self.pos_y + self.velocity)
+        if self.is_touching():
+            self.__del__()
+            # Also delete hit object
+
