@@ -2,7 +2,7 @@ import pyglet
 from pyglet import clock
 from pyglet.window import Window, FPSDisplay
 
-from Enemy import Enemy
+from Enemy import Enemy, EnemyMesh
 from gameobject import GameObject
 from runingLabels import RunningLabels
 from Player import Player
@@ -27,6 +27,13 @@ class GameBoard:
         # setup stuff
         self.game_objects.append(RunningLabels(self.batch))
         self.game_objects.append(Player(50, 50, '../assets/player.png'))
+
+
+        #adding multiple Enemies to game_objects
+        enemyMesh1 = EnemyMesh()
+        list = enemyMesh1.getEnemyMesh()
+        self.game_objects = list + self.game_objects
+
 
     def on_draw(self):
         self.window.clear()
