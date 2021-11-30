@@ -12,7 +12,8 @@ class Enemy(GameObject):
 
         self.speed = speed
         image = pyglet.image.load(image)
-        self.sprite = pyglet.sprite.Sprite(image, x=50, y=50)
+        self.sprite = pyglet.sprite.Sprite(image, x=self.x, y=self.y)
+        self.sprite.update(scale_x=0.1, scale_y=0.1)
 
     def getEnemySpeed(self):
         return self.speed
@@ -27,7 +28,8 @@ class Enemy(GameObject):
         return self.image
 
     def update(self,dt):
-        print("todo")
+        self.x += self.speed * dt
+        self.sprite.update(x=self.x)
 
     def spawnEnemy(self):
         print('spawn')
