@@ -21,6 +21,9 @@ class Enemy(GameObject):
     def getEnemySpeed(self):
         return self.speed
 
+    def getSprite(self):
+        return self.sprite
+
     def getEnemyX(self):
         return self.x
 
@@ -58,10 +61,26 @@ class Enemy(GameObject):
 
 class EnemyMesh:
 
+
+    # Three rows of Enemies right now. Enemies are still a bit big but i will channge them
+    # Movement still not working right.
     def __init__(self, enemyCount):
+
+        #get enemie height and width
+        pseudoEnemie = Enemy(0, 0, 0, '../assets/Enemy.jpeg')
+        enemieWidth = pseudoEnemie.sprite.width
+        enemieHeight = pseudoEnemie.sprite.height
+        del pseudoEnemie
+
+
+
         self.enemies = []
         for i in range(enemyCount):
-            self.enemies.append(Enemy(i*100+200, 600, 150, '../assets/Enemy.jpeg'))
+            self.enemies.append(Enemy(i * enemieWidth + 200, 600, 600, '../assets/Enemy.jpeg'))
+        for j in range(enemyCount):
+            self.enemies.append(Enemy(j * enemieWidth + 200, 600 - enemieHeight, 300, '../assets/Enemy.jpeg'))
+        for k in range(enemyCount):
+            self.enemies.append(Enemy(k * enemieWidth + 200, 600 - enemieHeight * 2, 500, '../assets/Enemy.jpeg'))
 
     def getEnemyMesh(self):
         return self.enemies
