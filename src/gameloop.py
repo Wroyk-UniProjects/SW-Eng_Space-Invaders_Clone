@@ -4,7 +4,9 @@ from pyglet.window import Window, FPSDisplay
 
 from gameobject import GameObject
 from runingLabels import RunningLabels
-
+from Player import Player
+from hitbox import Hitbox
+from Projectiles import Projectiles
 
 class GameBoard:
     window: Window = None
@@ -23,6 +25,7 @@ class GameBoard:
     def setup(self):
         # setup stuff
         self.game_objects.append(RunningLabels())
+        self.game_objects.append(Player(50, 50,'../assets/player.png'))
 
     def on_draw(self):
         self.window.clear()

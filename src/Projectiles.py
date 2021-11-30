@@ -1,7 +1,7 @@
 from hitbox import Hitbox
 
 
-class projectiles(object, Hitbox):
+class Projectiles(Hitbox):
     direction = 0   # 10 is up, -10 is down. Could be implemented differently...
 
     # Spawn with coordinates, direction(up for player, down for enemy) and hitbox
