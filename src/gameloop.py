@@ -30,7 +30,7 @@ class GameBoard:
 
 
         #adding multiple Enemies to game_objects
-        enemyMesh1 = EnemyMesh()
+        enemyMesh1 = EnemyMesh(10)
         list = enemyMesh1.getEnemyMesh()
         self.game_objects = list + self.game_objects
 

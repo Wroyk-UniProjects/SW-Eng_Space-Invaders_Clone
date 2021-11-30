@@ -54,11 +54,13 @@ class Enemy(GameObject):
 
 #Mesh creates multiple Enemies
 #Todo: get them to move together
+#maybe make them smaller?!
+
 class EnemyMesh:
 
-    def __init__(self):
+    def __init__(self, enemyCount):
         self.enemies = []
-        for i in range(10):
+        for i in range(enemyCount):
             self.enemies.append(Enemy(i*100+200, 600, 150, '../assets/Enemy.jpeg'))
 
     def getEnemyMesh(self):
