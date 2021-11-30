@@ -14,6 +14,7 @@ class Enemy(GameObject):
         image = pyglet.image.load(image)
         self.sprite = pyglet.sprite.Sprite(image, x=self.x, y=self.y)
         self.sprite.update(scale_x=0.1, scale_y=0.1)
+        self.direction = False
 
     def getEnemySpeed(self):
         return self.speed
@@ -28,8 +29,20 @@ class Enemy(GameObject):
         return self.image
 
     def update(self,dt):
-        self.x += self.speed * dt
-        self.sprite.update(x=self.x)
+
+
+        if(self.direction):
+            self.x += self.speed * dt
+            self.sprite.update(x=self.x)
+            print(self.direction)
+            if(self.x >= 1000):
+                self.direction = False
+        else:
+            self.x -= self.speed * dt
+            self.sprite.update(x=self.x)
+            print(self.direction)
+            if (self.x <= 100):
+                self.direction = True
 
     def spawnEnemy(self):
         print('spawn')
