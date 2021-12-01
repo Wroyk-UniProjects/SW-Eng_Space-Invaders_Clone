@@ -55,44 +55,44 @@ class Enemy(GameObject):
     def getEnemyY(self):
         return self.y
 
-    def getEnemyImage(self):
-        return self.image
-
-    def getLeftEndBoorder(self):
-        return self.positionLeft
-
-    def getRightBoorder(self):
-        return self.positionRight
-
     def update(self,dt):
-        if(self.direction):
-            self.x += self.speed * dt
-            self.sprite.update(x=self.x)
-            if(self.x >= self.rightBoorder):
-                self.direction = False
-                self.y = self.y - distanceMoveInFront
-                self.speed = self.speed * speedIncrementMovinginFront
-                self.sprite.update(y=self.y - distanceMoveInFront)
-        else:
-            self.x -= self.speed * dt
-            self.sprite.update(x=self.x)
-            if (self.x <= self.leftBoorder):
-                self.direction = True
-                self.y = self.y - distanceMoveInFront
-                self.speed = self.speed * speedIncrementMovinginFront
-                self.sprite.update(y=self.y - distanceMoveInFront)
+        if(self.active):
+            if(self.direction):
+                self.x += self.speed * dt
+                self.sprite.update(x=self.x)
+                if(self.x >= self.rightBoorder):
+                    self.direction = False
+                    self.y = self.y - distanceMoveInFront
+                    self.speed = self.speed * speedIncrementMovinginFront
+                    self.sprite.update(y=self.y - distanceMoveInFront)
+            else:
+                self.x -= self.speed * dt
+                self.sprite.update(x=self.x)
+                if (self.x <= self.leftBoorder):
+                    self.direction = True
+                    self.y = self.y - distanceMoveInFront
+                    self.speed = self.speed * speedIncrementMovinginFront
+                    self.sprite.update(y=self.y - distanceMoveInFront)
 
-            if(self.y <= 100):
-                self.active = False
-
+                if(self.y <= 200):
+                    self.enemyDie()
 
     def draw(self):
         if(self.active):
             self.sprite.draw()
 
+    #deleting all the attributes. There is no way for an object to delete itslelf
     def enemyDie(self):
         self.active = False
-
+        del self.sprite
+        del self.enemyHeight
+        del self.enemyWidth
+        del self.speed
+        del self.x
+        del self.y
+        del self.positionInMesh
+        del self.rightBoorder
+        del self.leftBoorder
 
 #Mesh creates multiple Enemies
 #maybe make them smaller?!
@@ -121,6 +121,6 @@ class EnemyMesh:
     def getEnemyMesh(self):
         return self.enemies
 
-    def update(self,dt):
+    def update(self, dt):
         for Enemy in self.enemies:
             Enemy.update(dt)
