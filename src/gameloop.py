@@ -14,6 +14,7 @@ class GameBoard:
     game_objects = []
 
     def __init__(self, window: Window, game_name: str):
+        self.batch = pyglet.graphics.Batch()
         self.window = window
         self.window.push_handlers(self)
         self.window.set_caption(game_name)
@@ -24,16 +25,17 @@ class GameBoard:
 
     def setup(self):
         # setup stuff
-        self.game_objects.append(RunningLabels())
+        self.game_objects.append(RunningLabels(self.batch))
         self.game_objects.append(Player(50, 50,'../assets/player.png'))
 
     def on_draw(self):
         self.window.clear()
+        self.batch.draw()
 
         # call draw() Method from all GameObjects
-        for game_object in self.game_objects:
-            if hasattr(game_object, "draw"):
-                game_object.draw()
+        # for game_object in self.game_objects:
+        #   if hasattr(game_object, "draw"):
+        #      game_object.draw()
 
         self.fps_display.draw()
 
