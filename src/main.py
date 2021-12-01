@@ -18,7 +18,6 @@ if __name__ == '__main__':
     resource.reindex()
 
     settings: dict = lode_settings()
-    print(settings)
     resource.add_font('monogram-extended.ttf')
 
     window = Window(settings.get("window_width"), settings.get("window_height"), vsync=False)
