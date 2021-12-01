@@ -1,5 +1,5 @@
 import pytest
-from src.hitbox import Hitbox
+from hitbox import Hitbox
 
 
 
