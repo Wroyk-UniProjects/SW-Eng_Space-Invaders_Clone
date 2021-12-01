@@ -47,3 +47,19 @@ class GameBoard:
 
     def run(self):
         pyglet.app.run()
+
+    def on_key_press(self, symbol, modifiers):
+        for game_object in self.game_objects:
+            if hasattr(game_object, "on_key_press"):
+                game_object.on_key_press(symbol, modifiers)
+
+    def on_key_release(self, symbol, modifiers):
+        for game_object in self.game_objects:
+            if hasattr(game_object, "on_key_release"):
+                game_object.on_key_release(symbol, modifiers)
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        for game_object in self.game_objects:
+            if hasattr(game_object, "on_mouse_press"):
+                game_object.on_mouse_press(x, y, button, modifiers)
+
