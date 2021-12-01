@@ -13,7 +13,7 @@ class Player (GameObject):
         self.icon = icon
 
         self.hitbox = Hitbox(self.startx, self.starty, 100, 100)
-        self.projectile = Projectiles(self.startx, self.starty, 100, 100)
+        self.projectile = Projectiles(self.startx, self.starty, 100, 100, 20)
 
         image = pyglet.image.load(self.icon)
         self.sprite = Sprite(image, x=100, y=102)

@@ -10,7 +10,7 @@ class Projectiles(GameObject, Hitbox):
     velocity = 0
 
     def __init__(self, x, y, length, width, velo):
-        super(Projectiles, self).__init__(x, y, length, width)
+        super(Projectiles, self).__init__((x, y, length, width))
         self.sprite = None
         self.velocity = velo
 
