@@ -5,7 +5,7 @@ from gameobject import GameObject
 
 class Enemy(GameObject):
 
-    def __init__(self, x, y, speed, image):
+    def __init__(self, x, y, speed, image, positionInMesh):
 
         self.x = x
         self.y = y
@@ -17,6 +17,11 @@ class Enemy(GameObject):
         self.enemyWidth = self.sprite.width
         self.direction = False
         print(self.enemyWidth)
+
+        self.positionInMesh = positionInMesh
+
+        self.rightBoorder = 1040 - self.enemyWidth + self.enemyWidth * self.positionInMesh
+        self.leftBoorder =  240 + self.enemyWidth * self.positionInMesh
 
     def getEnemySpeed(self):
         return self.speed
@@ -33,17 +38,22 @@ class Enemy(GameObject):
     def getEnemyImage(self):
         return self.image
 
+    def getLeftEndBoorder(self):
+        return self.positionLeft
+
+    def getRightBoorder(self):
+        return self.positionRight
 
     def update(self,dt):
         if(self.direction):
             self.x += self.speed * dt
             self.sprite.update(x=self.x)
-            if(self.x >= 1280/20*19-self.enemyWidth):
+            if(self.x >= self.rightBoorder):
                 self.direction = False
         else:
             self.x -= self.speed * dt
             self.sprite.update(x=self.x)
-            if (self.x <= 1280/20):
+            if (self.x <= self.leftBoorder):
                 self.direction = True
 
     def spawnEnemy(self):
@@ -67,7 +77,7 @@ class EnemyMesh:
     def __init__(self, enemyCount):
 
         #get enemie height and width
-        pseudoEnemie = Enemy(0, 0, 0, '../assets/Enemy.jpeg')
+        pseudoEnemie = Enemy(0, 0, 0, '../assets/Enemy.jpeg', 0)
         enemieWidth = pseudoEnemie.sprite.width
         enemieHeight = pseudoEnemie.sprite.height
         del pseudoEnemie
@@ -76,11 +86,9 @@ class EnemyMesh:
 
         self.enemies = []
         for i in range(enemyCount):
-            self.enemies.append(Enemy(i * enemieWidth + 200, 600, 600, '../assets/Enemy.jpeg'))
-        for j in range(enemyCount):
-            self.enemies.append(Enemy(j * enemieWidth + 200, 600 - enemieHeight, 300, '../assets/Enemy.jpeg'))
-        for k in range(enemyCount):
-            self.enemies.append(Enemy(k * enemieWidth + 200, 600 - enemieHeight * 2, 500, '../assets/Enemy.jpeg'))
+            self.enemies.append(Enemy(i * enemieWidth + 200, 600, 600, '../assets/Enemy.jpeg', i))
+            self.enemies.append(Enemy(i * enemieWidth + 200, 600 - enemieHeight, 300, '../assets/Enemy.jpeg', i))
+            self.enemies.append(Enemy(i * enemieWidth + 200, 600 - enemieHeight * 2, 500, '../assets/Enemy.jpeg', i))
 
     def getEnemyMesh(self):
         return self.enemies
