@@ -3,14 +3,18 @@ import pyglet
 from gameobject import GameObject
 
 
+distanceMoveInFront = 20
+speedIncrementMovinginFront = 1.2
+
 class Enemy(GameObject):
 
-    def __init__(self, x, y, speed, image, positionInMesh):
+    #Constructor
+    def __init__(self, x, y, Startspeed, image, positionInMesh):
 
         self.x = x
         self.y = y
 
-        self.speed = speed
+        self.speed = Startspeed
         image = pyglet.image.load(image)
         self.sprite = pyglet.sprite.Sprite(image, x=self.x, y=self.y)
         self.sprite.update(scale_x=0.075, scale_y=0.075)
@@ -22,6 +26,8 @@ class Enemy(GameObject):
 
         self.rightBoorder = 1040 - self.enemyWidth + self.enemyWidth * self.positionInMesh
         self.leftBoorder =  240 + self.enemyWidth * self.positionInMesh
+
+        self.active = True
 
     def getEnemySpeed(self):
         return self.speed
@@ -50,17 +56,28 @@ class Enemy(GameObject):
             self.sprite.update(x=self.x)
             if(self.x >= self.rightBoorder):
                 self.direction = False
+                self.y = self.y - distanceMoveInFront
+                self.speed = self.speed * speedIncrementMovinginFront
+                self.sprite.update(y=self.y - distanceMoveInFront)
         else:
             self.x -= self.speed * dt
             self.sprite.update(x=self.x)
             if (self.x <= self.leftBoorder):
                 self.direction = True
+                self.y = self.y - distanceMoveInFront
+                self.speed = self.speed * speedIncrementMovinginFront
+                self.sprite.update(y=self.y - distanceMoveInFront)
+
+            if(self.y <= 100):
+                self.active = False
+
 
     def spawnEnemy(self):
         print('spawn')
 
     def draw(self):
-        self.sprite.draw()
+        if(self.active):
+            self.sprite.draw()
 
     def despawnEnemie(self):
         print("todo")
@@ -86,9 +103,9 @@ class EnemyMesh:
 
         self.enemies = []
         for i in range(enemyCount):
-            self.enemies.append(Enemy(i * enemieWidth + 200, 600, 600, '../assets/Enemy.jpeg', i))
-            self.enemies.append(Enemy(i * enemieWidth + 200, 600 - enemieHeight, 300, '../assets/Enemy.jpeg', i))
-            self.enemies.append(Enemy(i * enemieWidth + 200, 600 - enemieHeight * 2, 500, '../assets/Enemy.jpeg', i))
+            self.enemies.append(Enemy(i * enemieWidth + 200, 600, 100, '../assets/Enemy.jpeg', i))
+            self.enemies.append(Enemy(i * enemieWidth + 200, 600 - enemieHeight, 100, '../assets/Enemy.jpeg', i))
+            self.enemies.append(Enemy(i * enemieWidth + 200, 600 - enemieHeight * 2, 100, '../assets/Enemy.jpeg', i))
 
     def getEnemyMesh(self):
         return self.enemies
