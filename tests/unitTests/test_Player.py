@@ -1,8 +1,6 @@
 from src.Player import Player
 
 
-
-
 def test_moveright():
     player = Player(50, 50, '../../assets/player.png')
     player.moveright()
