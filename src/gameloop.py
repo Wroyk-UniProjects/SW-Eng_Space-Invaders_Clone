@@ -25,7 +25,7 @@ class GameBoard:
 
     def setup(self):
         # setup stuff
-        self.game_objects.append(RunningLabels(self.batch))
+        #self.game_objects.append(RunningLabels(self.batch))
         self.game_objects.append(Player(50, 50, '../assets/player.png'))
 
 
