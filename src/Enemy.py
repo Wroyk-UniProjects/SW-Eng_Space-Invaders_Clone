@@ -1,6 +1,7 @@
 import pyglet
 
 from gameobject import GameObject
+import hitbox
 
 
 distanceMoveInFront = 20
@@ -9,25 +10,38 @@ speedIncrementMovinginFront = 1.2
 class Enemy(GameObject):
 
     #Constructor
-    def __init__(self, x, y, Startspeed, image, positionInMesh):
+    def __init__(self, x, y, startSpeed, image, positionInMesh):
 
+        #Location
         self.x = x
         self.y = y
 
-        self.speed = Startspeed
+        #EnemySpeed at the start
+        self.speed = startSpeed
+
+        #Sprite setup
         image = pyglet.image.load(image)
         self.sprite = pyglet.sprite.Sprite(image, x=self.x, y=self.y)
         self.sprite.update(scale_x=0.075, scale_y=0.075)
+
+        #Size of enemy
         self.enemyWidth = self.sprite.width
+        self.enemyHeight = self.sprite.height
         self.direction = False
         print(self.enemyWidth)
 
+        #We need this Parameter, to synchronise the movement of multiple Enemies in a Mesh
         self.positionInMesh = positionInMesh
 
         self.rightBoorder = 1040 - self.enemyWidth + self.enemyWidth * self.positionInMesh
         self.leftBoorder =  240 + self.enemyWidth * self.positionInMesh
 
+        #is the Enemy alive?
         self.active = True
+
+        #create hitbox for the enemy
+        self.hitbox = hitbox.Hitbox(self.x, self.y, self.enemyWidth, self.enemyHeight)
+
 
     def getEnemySpeed(self):
         return self.speed
@@ -72,18 +86,15 @@ class Enemy(GameObject):
                 self.active = False
 
 
-    def spawnEnemy(self):
-        print('spawn')
-
     def draw(self):
         if(self.active):
             self.sprite.draw()
 
-    def despawnEnemie(self):
-        print("todo")
+    def enemyDie(self):
+        self.active = False
+
 
 #Mesh creates multiple Enemies
-#Todo: get them to move together
 #maybe make them smaller?!
 
 class EnemyMesh:
