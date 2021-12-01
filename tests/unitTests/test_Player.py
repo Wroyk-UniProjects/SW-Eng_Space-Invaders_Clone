@@ -1,4 +1,4 @@
-from src.Player import Player
+from Player import Player
 
 
 def test_moveright():
