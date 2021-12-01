@@ -7,10 +7,6 @@ from pyglet.window import Window
 from gameloop import GameBoard
 
 
-def print_hi(name: str):
-    return name
-
-
 def lode_settings() -> dict:
     with open("../assets/settings.json") as json_file:
         s: dict = json.load(json_file)
