@@ -25,16 +25,17 @@ class GameBoard:
     def setup(self):
         # setup stuff
         self.game_objects.append(RunningLabels(self.batch))
-        self.game_objects.append(Player(50, 50, 'player.png'))
+        self.game_objects.append(Player(50, 50, '../assets/player.png'))
+        pass
 
     def on_draw(self):
         self.window.clear()
         self.batch.draw()
 
-        # call draw() Method from all GameObjects
-        # for game_object in self.game_objects:
-        #   if hasattr(game_object, "draw"):
-        #      game_object.draw()
+        # !!!deprecated will be remove!! call draw() Method from all GameObjects
+        for game_object in self.game_objects:
+            if hasattr(game_object, "draw"):
+                game_object.draw()
 
         self.fps_display.draw()
 

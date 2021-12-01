@@ -14,11 +14,12 @@ def lode_settings() -> dict:
 
 
 if __name__ == '__main__':
-    resource.path = ['.', '../assets', 'assets']
+    resource.path = ['../assets']
     resource.reindex()
 
     settings: dict = lode_settings()
-    font.add_file('monogram-extended.ttf')
+    print(settings)
+    resource.add_font('monogram-extended.ttf')
 
     window = Window(settings.get("window_width"), settings.get("window_height"), vsync=False)
     gameboard: GameBoard = GameBoard(window, "Space Invaders")
