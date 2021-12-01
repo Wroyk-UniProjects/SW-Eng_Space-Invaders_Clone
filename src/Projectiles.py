@@ -12,11 +12,10 @@ class Projectiles(GameObject, Hitbox):
         self.velocity = velo
 
     def draw(self):
-        pass
+        self.sprite.draw()
 
     def update(self, dt):
         self.set_hitbox_position(self.pos_x, self.pos_y + self.velocity * dt)
-        if self.is_touching():
+        if self.is_touching(other_obj="hitbox"):
             self.__del__()
-            # Also delete hit object
 
