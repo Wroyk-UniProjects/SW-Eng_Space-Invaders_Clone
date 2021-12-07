@@ -34,6 +34,7 @@ class Player (GameObject):
         self.velocity = 400
 
     def moveleft(self):
+        self.velocity = -1
 
     # shooting
     def shootprojectile(self):
@@ -47,6 +48,11 @@ class Player (GameObject):
         elif symbol is key.SPACE:
             self.shootprojectile()
 
+    def on_key_release(self, symbol, modifier):
+        if symbol is key.D or key.RIGHT:
+            self.velocity = 0
+        elif symbol is key.A or key.LEFT:
+            self.velocity = 0
 
     def moveleft(self):
         self.velocity = -400
@@ -115,4 +121,5 @@ class Player (GameObject):
                 self.startx = 0
             self.sprite.x = self.startx
             self.hitbox.x = self.startx
+
 
