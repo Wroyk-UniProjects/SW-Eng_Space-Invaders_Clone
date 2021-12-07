@@ -62,8 +62,8 @@ class Enemy(GameObject):
         return self.y
 
     def update(self, dt):
-        if self.active:
-            if (self.direction):
+        if(self.active):
+            if(self.direction):
                 self.x += self.speed * dt
                 self.sprite.update(x=self.x)
                 if (self.x >= self.rightBoorder):

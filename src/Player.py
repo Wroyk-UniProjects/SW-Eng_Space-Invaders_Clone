@@ -8,17 +8,17 @@ from hitbox import Hitbox, HitMask
 
 
 class Player (GameObject):
-    def __init__(self, startx, starty, icon):
+    def __init__(self, startx, starty, icon, batch1):
         self.startx = startx
         self.starty = starty
         self.icon = icon
         self.velocity = 0
 
-        self.hitbox = Hitbox(self.startx, self.starty, 100, 100, mask=HitMask.PLAYER)
-        #self.projectile = Projectiles(self.startx, self.starty, 100, 100, 20)
+        self.hitbox = Hitbox(self.startx, self.starty, 100, 100)
+        self.projectile = Projectiles(self.startx, self.starty, 100, 100, 20, batch=batch1)
 
         image = pyglet.image.load(self.icon)
-        self.sprite = Sprite(image, x=self.startx, y=self.starty)
+        self.sprite = Sprite(image, x=100, y=102, batch=batch1)
         self.sprite.update(scale_x=.75, scale_y=.75)
 
         self.active = True
