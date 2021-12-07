@@ -33,6 +33,16 @@ class Player (GameObject):
     def moveright(self):
         self.velocity = 400
 
+
+    def on_key_press(self, symbol, modifiers):
+        if symbol is key.D or key.RIGHT:
+            self.moveright()
+        elif symbol is key.A or key.LEFT:
+            self.moveleft()
+        elif symbol is key.SPACE:
+            self.shootprojectile()
+
+
     def moveleft(self):
         self.velocity = -400
 
@@ -75,6 +85,3 @@ class Player (GameObject):
                 self.startx = 0
             self.sprite.x = self.startx
             self.hitbox.x = self.startx
-
-    # player needs self.active methods for lives functions
-
