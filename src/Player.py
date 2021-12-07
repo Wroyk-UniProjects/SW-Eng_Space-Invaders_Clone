@@ -24,9 +24,12 @@ class Player (GameObject):
 
     #movement functions
     def moveright(self):
-        self.rightMovementKeyD = key.D
-        self.rightMovementKeyRight = key.RIGHT
 
+    def moveleft(self):
+
+    # shooting
+    def shootprojectile(self):
+        self.projectile.spawn()
 
     def on_key_press(self, symbol, modifiers):
         if symbol is key.D or key.RIGHT:
@@ -37,13 +40,9 @@ class Player (GameObject):
             self.shootprojectile()
 
 
-    def moveleft(self):
-        self.leftMovementKeyA = key.A
-        self.leftMovementKeyLeft = key.LEFT
 
-    #shooting
-    def shootprojectile(self):
-        self.projectile.spawn()
+
+
 
     #from gameobject
     def draw(self):
