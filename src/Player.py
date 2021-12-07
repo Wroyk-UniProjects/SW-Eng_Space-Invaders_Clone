@@ -12,8 +12,7 @@ class Player (GameObject):
         self.startx = startx
         self.starty = starty
         self.icon = icon
-        self.velocityLeft = -1
-        self.velocityRight = 1
+        self.velocity = 0
 
         self.hitbox = Hitbox(self.startx, self.starty, 100, 100)
         self.projectile = Projectiles(self.startx, self.starty, 100, 100, 20)
@@ -24,8 +23,10 @@ class Player (GameObject):
 
     #movement functions
     def moveright(self):
+        self.velocity = 1
 
     def moveleft(self):
+        self.velocity = -1
 
     # shooting
     def shootprojectile(self):
@@ -39,9 +40,11 @@ class Player (GameObject):
         elif symbol is key.SPACE:
             self.shootprojectile()
 
-
-
-
+    def on_key_release(self, symbol, modifier):
+        if symbol is key.D or key.RIGHT:
+            self.velocity = 0
+        elif symbol is key.A or key.LEFT:
+            self.velocity = 0
 
 
     #from gameobject
@@ -49,5 +52,7 @@ class Player (GameObject):
         self.sprite.draw()
 
     def update(self, dt):
-        pass
+        self.startx += self.startx*self.velocity*dt
+        self.sprite.x = self.startx
+
 
