@@ -37,8 +37,7 @@ class GameBoard:
     def setup(self):
         # setup stuff
         #self.game_objects.append(RunningLabels(self.batch))
-
-        self.game_objects.append(Player(50, 50, '../assets/player.png'))
+        self.game_objects.append(Player(50, 50, '../assets/player.png', self.batch))
 
         projectile.spawn(self.window.width / 2, 0, HitMask.ENEMY, projectile.Direction.UP, self.batch)
 
