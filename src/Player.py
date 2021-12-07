@@ -33,6 +33,11 @@ class Player (GameObject):
     def moveright(self):
         self.velocity = 400
 
+    def moveleft(self):
+
+    # shooting
+    def shootprojectile(self):
+        self.projectile.spawn()
 
     def on_key_press(self, symbol, modifiers):
         if symbol is key.D or key.RIGHT:
