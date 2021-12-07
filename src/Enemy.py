@@ -4,8 +4,8 @@ from gameobject import GameObject
 import hitbox
 
 
-distanceMoveInFront = 20
-speedIncrementMovinginFront = 1.2
+distanceMoveInFront = 10
+speedIncrementMovinginFront = 10
 
 class Enemy(GameObject):
 
@@ -22,19 +22,18 @@ class Enemy(GameObject):
         #Sprite setup
         image = pyglet.image.load(image)
         self.sprite = pyglet.sprite.Sprite(image, x=self.x, y=self.y)
-        self.sprite.update(scale_x=0.075, scale_y=0.075)
+        self.sprite.update(scale_x=0.05, scale_y=0.05)
 
         #Size of enemy
         self.enemyWidth = self.sprite.width
         self.enemyHeight = self.sprite.height
         self.direction = False
-        print(self.enemyWidth)
 
         #We need this Parameter, to synchronise the movement of multiple Enemies in a Mesh
         self.positionInMesh = positionInMesh
 
-        self.rightBoorder = 1040 - self.enemyWidth + self.enemyWidth * self.positionInMesh
-        self.leftBoorder =  240 + self.enemyWidth * self.positionInMesh
+        self.rightBoorder = self.enemyWidth * 10 - self.enemyWidth + self.enemyWidth * self.positionInMesh
+        self.leftBoorder =  40 + self.enemyWidth * self.positionInMesh
 
         #is the Enemy alive?
         self.active = True
@@ -63,7 +62,7 @@ class Enemy(GameObject):
                 if(self.x >= self.rightBoorder):
                     self.direction = False
                     self.y = self.y - distanceMoveInFront
-                    self.speed = self.speed * speedIncrementMovinginFront
+                    self.speed = self.speed + speedIncrementMovinginFront
                     self.sprite.update(y=self.y - distanceMoveInFront)
             else:
                 self.x -= self.speed * dt
@@ -71,7 +70,7 @@ class Enemy(GameObject):
                 if (self.x <= self.leftBoorder):
                     self.direction = True
                     self.y = self.y - distanceMoveInFront
-                    self.speed = self.speed * speedIncrementMovinginFront
+                    self.speed = self.speed + speedIncrementMovinginFront
                     self.sprite.update(y=self.y - distanceMoveInFront)
 
                 if(self.y <= 200):
@@ -105,7 +104,7 @@ class EnemyMesh:
     def __init__(self, enemyCount):
 
         #get enemie height and width
-        pseudoEnemie = Enemy(0, 0, 0, '../assets/Enemy.jpeg', 0)
+        pseudoEnemie = Enemy(0, 0, 0, '../assets/enemy_updated.png', 0)
         enemieWidth = pseudoEnemie.sprite.width
         enemieHeight = pseudoEnemie.sprite.height
         del pseudoEnemie
@@ -114,9 +113,9 @@ class EnemyMesh:
 
         self.enemies = []
         for i in range(enemyCount):
-            self.enemies.append(Enemy(i * enemieWidth + 200, 600, 100, '../assets/Enemy.jpeg', i))
-            self.enemies.append(Enemy(i * enemieWidth + 200, 600 - enemieHeight, 100, '../assets/Enemy.jpeg', i))
-            self.enemies.append(Enemy(i * enemieWidth + 200, 600 - enemieHeight * 2, 100, '../assets/Enemy.jpeg', i))
+            self.enemies.append(Enemy(i * enemieWidth + 200, 620, 50, '../assets/enemy_updated.png', i))
+            self.enemies.append(Enemy(i * enemieWidth + 200, 620 - enemieHeight, 50, '../assets/enemy_updated.png', i))
+            self.enemies.append(Enemy(i * enemieWidth + 200, 620 - enemieHeight * 2, 50, '../assets/enemy_updated.png', i))
 
     def getEnemyMesh(self):
         return self.enemies
