@@ -69,3 +69,4 @@ class Player (GameObject):
             self.hitbox.x = self.startx
 
     # player needs self.active methods for lives functions
+
