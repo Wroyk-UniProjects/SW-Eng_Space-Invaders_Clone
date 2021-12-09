@@ -67,3 +67,4 @@ class Player (GameObject):
             self.sprite.x = self.startx
             self.hitbox.x = self.startx
 
+    # player needs self.active methods for lives functions
