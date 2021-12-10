@@ -2,11 +2,18 @@ import hitbox
 
 
 class Lives:
-    # starting number of lives
     num_of_lives = 3
 
-    # loop to check num of lives
+    def __init__(self, num_of_lives):
+        # loop to check num of lives
+        while num_of_lives > 0:
+            self.active = True
+        else:
+            self.die()
 
-    # loop to decrement lives if hit
+        # loop to decrement lives if hit
 
     # death
+    def die(self):
+        self.active = False
+        # todo: add game over functions
