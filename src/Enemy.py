@@ -121,5 +121,5 @@ class EnemyMesh:
         return self.enemies
 
     def update(self, dt):
-        for Enemy in self.enemies:
-            Enemy.update(dt)
+        for enemy in self.enemies:
+            enemy.update(dt)
