@@ -100,7 +100,6 @@ class GameBoard:
         for game_object in self.game_objects:
             if hasattr(game_object, "update"):
                 game_object.update(dt)
-        #print(f"{time.time() - self.last_scheduled_update}:{dt}:{1/dt}")
 
         # process active Projectiles
         for current_projectile in projectile.active_projectiles:
