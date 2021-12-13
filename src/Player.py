@@ -34,24 +34,24 @@ class Player (GameObject):
         self.velocity = 400
 
     def moveleft(self):
-        self.velocity = -1
+        self.velocity = -400
 
     # shooting
     def shootprojectile(self):
         self.projectile.spawn()
 
     def on_key_press(self, symbol, modifiers):
-        if symbol is key.D or key.RIGHT:
+        if symbol is key.D or symbol is key.RIGHT:
             self.moveright()
-        elif symbol is key.A or key.LEFT:
+        elif symbol is key.A or symbol is key.LEFT:
             self.moveleft()
         elif symbol is key.SPACE:
             self.shootprojectile()
 
     def on_key_release(self, symbol, modifier):
-        if symbol is key.D or key.RIGHT:
+        if symbol is key.D or symbol is key.RIGHT:
             self.velocity = 0
-        elif symbol is key.A or key.LEFT:
+        elif symbol is key.A or symbol is key.LEFT:
             self.velocity = 0
 
     def moveleft(self):
