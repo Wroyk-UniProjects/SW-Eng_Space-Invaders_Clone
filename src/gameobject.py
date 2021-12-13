@@ -8,6 +8,7 @@ GAMEOBJECTS = pyglet.graphics.OrderedGroup(1)
 PROJECTILES = pyglet.graphics.OrderedGroup(2)
 UI = pyglet.graphics.OrderedGroup(3)
 
+game_objects = []
 
 class GameObject(ABC):
     @abstractmethod
@@ -16,3 +17,4 @@ class GameObject(ABC):
 
     def __init__(self, batch):
         self.batch = batch
+        #game_objects.append(self)
