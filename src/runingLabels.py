@@ -23,7 +23,9 @@ class RunningLabels(GameObject):
         self.s = Sprite(image, x=300, y=300, group=GAMEOBJECTS, batch=batch)
         self.s.update(scale_x=2, scale_y=2)
         # https://pyglet.readthedocs.io/en/latest/programming_guide/graphics.html#batches-and-groups-in-other-modules
+        print(f"{self.label.x}:{self.label1.x}")
 
     def update(self, dt):
         self.label.x += 1  # uncorrected for Delta t
         self.label1.x += 60 * dt  # corrected for Delta t
+        print(f"{self.label.x}:{self.label1.x}:{dt}")
