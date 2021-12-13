@@ -1,43 +1,67 @@
+# Hitbox ( position_x, position_y, width, height)
+from enum import Enum
 
-# Hitbox ( position_x, position_y, width, length )
+
+# active_hitboxes: list = []
+
+# add new masks as needed
+class HitMask(Enum):
+    ALL = 0
+    PLAYER = 1
+    ENEMY = 2
+
+
 class Hitbox:
     # X and Y positions
-    pos_x = 0
-    pos_y = 0
+    x = 0
+    y = 0
 
     # Hitbox sizes
     width = 0
-    length = 0
+    height = 0
 
     # class initialisation
-    def __init__(self, pos_x, pos_y, l, w):
-        self.pos_x = pos_x
-        self.pos_y = pos_y
-        self.length = l
-        self.width = w
+    def __init__(self, pos_x: int, pos_y: int, width: int, height: int, mask: HitMask = HitMask.ALL):
+        self.x = pos_x
+        self.y = pos_y
+        self.height = height
+        self.width = width
+        self.mask = mask
+        # active_hitboxes.append(self)
+
+    # def __del__(self):
+    # if self in active_hitboxes:
+    # active_hitboxes.remove(self)
 
     def set_pos_x(self, x):
-        self.pos_x = x
+        self.x = x
 
     def set_pos_y(self, y):
-        self.pos_y = y
+        self.y = y
 
     def set_hitbox_position(self, x, y):
-        self.pos_x = x
-        self.pos_y = y
+        self.x = x
+        self.y = y
 
-    def set_hitbox_size(self, length, width):
+    def set_hitbox_size(self, width, height):
         self.width = width
-        self.length = length
+        self.height = height
 
     def get_hitbox_position(self):
-        return self.pos_x, self.pos_y  # returns array of (x, y)
+        return self.x, self.y  # returns array of (x, y)
 
     def get_size_hitbox(self):
-        return self.width, self.length  # returns array of (width, length)
+        return self.width, self.height  # returns array of (width, height)
 
-    def is_touching(self, other_obj: "hitbox"):
-        if (self.pos_x < other_obj.pos_x + other_obj.width) and (self.pos_x + self.width > other_obj.pos_x) and (self.pos_y < other_obj.pos_y + other_obj.length) and (self.length + self.pos_y > other_obj.pos_y):
+    def is_colliding(self, other_hitbox: "Hitbox"):
+
+        if self.mask != other_hitbox.mask and other_hitbox.mask != HitMask.ALL and self.mask != HitMask.ALL:
+            return False
+
+        if (self.x < other_hitbox.x + other_hitbox.width) \
+                and (self.x + self.width > other_hitbox.x) \
+                and (self.y < other_hitbox.y + other_hitbox.height) \
+                and (self.height + self.y > other_hitbox.y):
             return True
         else:
             return False
