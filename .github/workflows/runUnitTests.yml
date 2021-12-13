@@ -18,7 +18,7 @@ jobs:
           python-version: 3.9.9
       - name: Install dependencies
         run: |
-          sudo apt-get install freeglut3
+          sudo apt-get install freeglut3-dev
           python -m pip install --upgrade pip
           pip install -r requirements.txt
       - name: Setup package
