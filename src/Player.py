@@ -2,7 +2,7 @@ import pyglet
 from pyglet.sprite import Sprite
 from pyglet.window import key
 
-from Projectiles import Projectiles
+from projectile import Projectile
 from gameobject import GameObject
 from hitbox import Hitbox
 
@@ -15,7 +15,7 @@ class Player (GameObject):
         self.velocity = 0
 
         self.hitbox = Hitbox(self.startx, self.starty, 100, 100)
-        self.projectile = Projectiles(self.startx, self.starty, 100, 100, 20)
+        #self.projectile = Projectiles(self.startx, self.starty, 100, 100, 20)
 
         image = pyglet.image.load(self.icon)
         self.sprite = Sprite(image, x=100, y=102)
