@@ -71,7 +71,7 @@ class GameBoard:
                 if hasattr(game_object, "hitbox") and current_projectile.is_colliding(game_object.hitbox):
                     current_projectile.on_collision()
                     if hasattr(game_object, "on_collision"):
-                        game_object.on_on_collision()
+                        game_object.on_collision()
                     break
 
     def run(self):
