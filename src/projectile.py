@@ -3,6 +3,7 @@ from enum import Enum
 import pyglet.resource
 from pyglet.sprite import Sprite
 
+import hitbox
 from hitbox import Hitbox, HitMask
 from gameobject import GameObject, PROJECTILES
 
@@ -35,12 +36,15 @@ class Projectile(GameObject, Hitbox):
 
         self.mask = mask
         self.direction = direction
-        if self.direction == Direction.DOWN:
-            self.sprite.rotation(180)
-            self.sprite.x -= self.width
-            self.sprite.y -= self.height
+        #if self.direction == Direction.DOWN:
+        #    self.sprite.rotation = 180
+        #    self.sprite.x -= self.width
+        #    self.sprite.y -= self.height
 
         self.velocity = velocity * direction.value
+
+
+        hitbox.debug_hitboxs.append(self)
 
     def update(self, dt):
         self.y += self.velocity * dt
@@ -50,7 +54,7 @@ class Projectile(GameObject, Hitbox):
             self.clean_up()
             return
         # Move sprite
-        if self.direction == Direction.DOWN:
+        if self.direction is Direction.DOWN:
             self.sprite.y += self.y - self.height
         else:
             self.sprite.y = self.y

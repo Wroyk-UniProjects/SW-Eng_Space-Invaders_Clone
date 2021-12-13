@@ -4,6 +4,7 @@ import pyglet
 from pyglet import clock
 from pyglet.window import Window, FPSDisplay
 
+import hitbox
 import projectile
 from Enemy import Enemy, EnemyMesh
 from gameobject import GameObject
@@ -26,7 +27,7 @@ class GameBoard:
         self.alive = False
 
         self.physics_fps = 120
-        self.draw_fps = 60
+        self.draw_fps = None
         self.last_scheduled_update = time.time()
         self.last_scheduled_draw = time.time()
 
@@ -34,7 +35,8 @@ class GameBoard:
 
     def setup(self):
         # setup stuff
-        # self.game_objects.append(RunningLabels(self.batch))
+        #self.game_objects.append(RunningLabels(self.batch))
+
         self.game_objects.append(Player(50, 50, '../assets/player.png'))
 
         projectile.spawn(self.window.width / 2, 0, HitMask.ENEMY, projectile.Direction.UP, self.batch)
@@ -46,13 +48,16 @@ class GameBoard:
 
     def on_draw(self):
         self.window.clear()
-        self.batch.draw()
 
         # !!!deprecated will be remove!!
         # call draw() Method from all GameObjects
         for game_object in self.game_objects:
             if hasattr(game_object, "draw"):
                 game_object.draw()
+                pass
+
+        self.batch.draw()
+        hitbox.debug_hitbox_batch.draw()
 
         self.fps_display.draw()
         self.window.flip()
@@ -69,10 +74,15 @@ class GameBoard:
             for game_object in self.game_objects:
 
                 if hasattr(game_object, "hitbox") and current_projectile.is_colliding(game_object.hitbox):
+                    hitbox.debug_hitboxs.remove(game_object.hitbox)
+                    hitbox.debug_hitboxs.remove(current_projectile)
                     current_projectile.on_collision()
                     if hasattr(game_object, "on_collision"):
                         game_object.on_collision()
                     break
+
+
+        hitbox.debug_hitbox_update()
 
     def run(self):
         # clock.schedule(self.update)

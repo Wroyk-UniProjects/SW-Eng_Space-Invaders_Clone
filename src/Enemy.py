@@ -93,6 +93,9 @@ class Enemy(GameObject):
         del self.rightBoorder
         del self.leftBoorder
 
+    def on_collision(self):
+        self.enemyDie()
+
 #Mesh creates multiple Enemies
 #maybe make them smaller?!
 
@@ -107,6 +110,7 @@ class EnemyMesh:
         pseudoEnemie = Enemy(0, 0, 0, '../assets/enemy_updated.png', 0)
         enemieWidth = pseudoEnemie.sprite.width
         enemieHeight = pseudoEnemie.sprite.height
+        hitbox.debug_hitboxs.remove(pseudoEnemie.hitbox)
         del pseudoEnemie
 
 
