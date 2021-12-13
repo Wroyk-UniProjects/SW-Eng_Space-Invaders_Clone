@@ -18,7 +18,7 @@ class Projectiles(GameObject, Hitbox):
         self.sprite.draw()
 
     def update(self, dt):
-        self.set_hitbox_position(self.pos_x, self.pos_y + self.velocity * dt)
-        if self.is_touching(other_obj="hitbox"):
+        self.set_hitbox_position(self.x, self.y + self.velocity * dt)
+        if self.is_colliding(other_hitbox="hitbox"):
             # self.__del__()
             pass
