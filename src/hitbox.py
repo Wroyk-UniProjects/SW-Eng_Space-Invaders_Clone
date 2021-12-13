@@ -1,6 +1,20 @@
 # Hitbox ( position_x, position_y, width, height)
 from enum import Enum
 
+import pyglet
+from pyglet import shapes
+from pyglet.text import Label
+
+debug_hitbox_batch = pyglet.graphics.Batch()
+debug_hitboxs = []
+
+
+def debug_hitbox_update():
+    global debug_hitbox_batch
+    debug_hitbox_batch = pyglet.graphics.Batch()
+    for debug_hitbox in debug_hitboxs:
+        debug_hitbox.debug()
+
 
 # active_hitboxes: list = []
 
@@ -28,6 +42,7 @@ class Hitbox:
         self.width = width
         self.mask = mask
         # active_hitboxes.append(self)
+        debug_hitboxs.append(self)
 
     # def __del__(self):
     # if self in active_hitboxes:
@@ -65,3 +80,21 @@ class Hitbox:
             return True
         else:
             return False
+
+    def debug(self):
+        start = (self.x, self.y)
+        height = (self.x, self.y + self.height)
+        width = (self.x + self.width, self.y)
+        end = (self.x + self.width, self.y + self.height)
+        #print(f"{start} :: {end}; {width} :: {height}; {self}")
+
+        #self.lable = Label(f"{self}", x=start[0], y=start[1]+10, batch=debug_hitbox_batch)
+
+        self.line1 = shapes.Line(start[0], start[1], width[0], width[1], 1, color=(255, 0, 0), batch=debug_hitbox_batch)
+        self.line2 = shapes.Line(start[0], start[1], height[0], height[1], 1, color=(0, 255, 0), batch=debug_hitbox_batch)
+
+        self.line3 = shapes.Line(height[0], height[1], end[0], end[1], 1, color=(0, 0, 255), batch=debug_hitbox_batch)
+        self.line4 = shapes.Line(width[0], width[1], end[0], end[1], 1, color=(0, 0, 255), batch=debug_hitbox_batch)
+
+        self.rec1 = shapes.Rectangle(start[0], start[1], 5, 5, color=(255, 255, 0), batch=debug_hitbox_batch)
+        self.rec2 = shapes.Rectangle(end[0]-5, end[1]-5, 5, 5, color=(0, 0, 255), batch=debug_hitbox_batch)
