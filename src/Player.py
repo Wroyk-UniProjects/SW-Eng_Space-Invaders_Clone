@@ -34,21 +34,21 @@ class Player (GameObject):
 
     # shooting
     def shootprojectile(self):
-        self.projectile.spawn()
+        Projectiles()
 
     def on_key_press(self, symbol, modifiers):
         if symbol is key.D or symbol is key.RIGHT:
             self.moveright()
         elif symbol is key.A or symbol is key.LEFT:
             self.moveleft()
-        elif symbol is key.SPACE:
-            self.shootprojectile()
 
     def on_key_release(self, symbol, modifier):
         if symbol is key.D or symbol is key.RIGHT:
             self.velocity = 0
         elif symbol is key.A or symbol is key.LEFT:
             self.velocity = 0
+        elif symbol is key.SPACE:
+            self.shootprojectile()
 
     def on_collision(self):
         self.num_of_lives -= 1
