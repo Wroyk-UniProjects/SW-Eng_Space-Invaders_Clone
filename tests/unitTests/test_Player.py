@@ -4,10 +4,10 @@ from Player import Player
 def test_moveright():
     player = Player(50, 50, '../../assets/player.png')
     player.moveright()
-    assert player.startx == 51
+    assert player.velocity == 400
 
 
 def test_moveleft():
     player = Player(50, 50, '../../assets/player.png')
     player.moveleft()
-    assert player.startx == 49
+    assert player.velocity == -400
