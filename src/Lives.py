@@ -1,4 +1,4 @@
-import Projectiles
+import projectile
 
 
 class Lives:
@@ -12,7 +12,7 @@ class Lives:
             self.die()
 
         # loop to decrement lives if hit
-        if Projectiles.is_touching(other_obj="hitbox"):
+        if projectile.is_touching(other_obj="hitbox"):
             num_of_lives - 1
 
     # death
