@@ -15,7 +15,7 @@ class Player (GameObject):
         self.velocity = 0
 
         self.hitbox = Hitbox(self.startx, self.starty, 100, 100)
-        self.projectile = Projectiles(self.startx, self.starty, 100, 100, 20, batch=batch1)
+        self.projectile = Projectiles(self.startx, self.starty, 100, 100, 20, batch1)
 
         image = pyglet.image.load(self.icon)
         self.sprite = Sprite(image, x=100, y=102, batch=batch1)
