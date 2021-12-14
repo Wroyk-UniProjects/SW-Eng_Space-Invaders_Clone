@@ -2,7 +2,7 @@ import pyglet
 from pyglet.sprite import Sprite
 from pyglet.window import key
 
-from projectile import Projectile
+import projectile
 from gameobject import GameObject
 from hitbox import Hitbox, HitMask
 
@@ -49,8 +49,13 @@ class Player (GameObject):
             self.velocity = 0
 
     def on_collision(self):
-        self.active = False
-        del self.hitbox
+        num_of_lives = 3
+        while num_of_lives > 0:
+            if projectile.is_colliding(other_obj="hitbox"):
+                num_of_lives -1
+        else:
+            self.active = False
+            del self.hitbox
 
     #from gameobject
     def draw(self):
