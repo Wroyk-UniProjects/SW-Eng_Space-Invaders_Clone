@@ -13,6 +13,7 @@ class Player (GameObject):
         self.starty = starty
         self.icon = icon
         self.velocity = 0
+        self.num_of_lives = 3
 
         self.hitbox = Hitbox(self.startx, self.starty, 100, 100)
         self.projectile = Projectiles(self.startx, self.starty, 100, 100, 20, batch1)
@@ -49,11 +50,8 @@ class Player (GameObject):
             self.velocity = 0
 
     def on_collision(self):
-        num_of_lives = 3
-        while num_of_lives > 0:
-            if projectile.is_colliding(other_obj="hitbox"):
-                num_of_lives -1
-        else:
+        self.num_of_lives - 1
+        if self.num_of_lives < 1:
             self.active = False
             del self.hitbox
 
