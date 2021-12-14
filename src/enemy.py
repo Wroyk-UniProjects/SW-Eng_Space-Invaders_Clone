@@ -61,6 +61,10 @@ class Enemy(GameObject):
     def getEnemyY(self):
         return self.y
 
+    def updateHitbox(self):
+        self.hitbox.set_hitbox_position(self.x, self.y)
+        print(self.hitbox.get_hitbox_position()[1])
+
     def update(self, dt):
         if(self.active):
             if(self.direction):
@@ -83,6 +87,8 @@ class Enemy(GameObject):
                 if (self.y <= 200):
                     self.enemyDie()
 
+            self.updateHitbox()
+            
             global shoot_cooldown
             if random.randrange(0, 18) == self.positionInMesh and shoot_cooldown < 0:
                 #print("zt")
