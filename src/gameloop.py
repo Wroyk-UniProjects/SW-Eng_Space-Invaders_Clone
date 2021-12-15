@@ -53,7 +53,7 @@ class GameBoard:
         self.fps_display.draw()
         self.window.flip()
 
-    def update(self, dt: object):
+    def update(self, dt: float):
         # call update() Method from all GameObjects
         for game_object in self.game_objects:
             if hasattr(game_object, "update"):

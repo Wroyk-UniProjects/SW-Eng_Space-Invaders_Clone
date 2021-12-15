@@ -125,3 +125,5 @@ dmypy.json
 
 # Apple Fils
 .DS_Store
+
+Class_Diagram.asta.lock
