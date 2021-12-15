@@ -38,7 +38,9 @@ class Player (GameObject):
 
     # shooting
     def shootprojectile(self):
-        Projectiles()
+        if self.active:
+
+            projectile.spawn(self.startx, self.starty, HitMask.ENEMY, projectile.Direction.UP, self.batch)
 
     def on_key_press(self, symbol, modifiers):
         if symbol is key.D or symbol is key.RIGHT:
