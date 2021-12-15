@@ -24,11 +24,13 @@ class Projectile(GameObject, Hitbox):
 
     def __init__(self, x, y, batch, mask: HitMask = HitMask.ALL, direction: Direction = Direction.UP,
                  velocity: float = 100, image: str = "player_projectile.png"):
-        super().__init__(batch)
+        # super().__init__(batch)
         self.x = x
         self.y = y
+
         imag = pyglet.resource.image(image)
         self.sprite = Sprite(imag, x, y, group=PROJECTILES, batch=batch)
+
         self.sprite.update(scale=0.01)
 
         self.width = self.sprite.width
@@ -36,10 +38,10 @@ class Projectile(GameObject, Hitbox):
 
         self.mask = mask
         self.direction = direction
-        # if self.direction == Direction.DOWN:
-        #    self.sprite.rotation = 180
-        #    self.sprite.x -= self.width
-        #    self.sprite.y -= self.height
+        if self.direction == Direction.DOWN:
+            self.sprite.rotation = 180
+            self.sprite.x += self.width
+            self.sprite.y += self.height
 
         self.velocity = velocity * direction.value
 
@@ -54,12 +56,12 @@ class Projectile(GameObject, Hitbox):
             return
         # Move sprite
         if self.direction is Direction.DOWN:
-            self.sprite.y += self.y - self.height
+            self.sprite.y = self.y + self.height
         else:
             self.sprite.y = self.y
 
     def clean_up(self):
-        #print(self)
+        # print(self)
         hitbox.debug_hitboxs.remove(self)
         active_projectiles.remove(self)
         del self.sprite

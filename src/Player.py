@@ -2,13 +2,14 @@ import pyglet
 from pyglet.sprite import Sprite
 from pyglet.window import key
 
+import hitbox
 import projectile
 from gameobject import GameObject
 from hitbox import Hitbox, HitMask
 
 
 class Player (GameObject):
-    def __init__(self, startx, starty, icon, batch1):
+    def __init__(self, startx, starty, icon, batch):
         self.startx = startx
         self.starty = starty
         self.icon = icon
@@ -16,10 +17,10 @@ class Player (GameObject):
         self.num_of_lives = 3
 
         self.hitbox = Hitbox(self.startx, self.starty, 100, 100)
-        self.projectile = Projectiles(self.startx, self.starty, 100, 100, 20, batch1)
+        #self.projectile = Projectiles(self.startx, self.starty, 100, 100, 20, batch1)
 
         image = pyglet.image.load(self.icon)
-        self.sprite = Sprite(image, x=100, y=102, batch=batch1)
+        self.sprite = Sprite(image, x=self.startx, y=self.starty, batch=batch)
         self.sprite.update(scale_x=.75, scale_y=.75)
 
         self.active = True
@@ -50,15 +51,12 @@ class Player (GameObject):
             self.velocity = 0
 
     def on_collision(self):
-        self.num_of_lives - 1
+        self.num_of_lives -= 1
         if self.num_of_lives < 1:
+            hitbox.debug_hitboxs.remove(self.hitbox)
             self.active = False
+            del self.sprite
             del self.hitbox
-
-    #from gameobject
-    def draw(self):
-        if self.active:
-            self.sprite.draw()
 
     def update(self, dt):
         if self.active:

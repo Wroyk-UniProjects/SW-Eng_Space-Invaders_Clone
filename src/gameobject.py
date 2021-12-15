@@ -15,6 +15,6 @@ class GameObject(ABC):
     def update(self, dt):
         pass
 
-    def __init__(self, batch):
-        self.batch = batch
+    #def __init__(self, batch):
+        #self.batch = batch
         #game_objects.append(self)
