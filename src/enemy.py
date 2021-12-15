@@ -29,7 +29,7 @@ class Enemy(GameObject):
         self.batch = batch
         # Sprite setup
         image = pyglet.image.load(image)
-        self.sprite = pyglet.sprite.Sprite(image, x=self.x, y=self.y,group=gameobject.GAMEOBJECTS, batch=self.batch)
+        self.sprite = pyglet.sprite.Sprite(image, x=self.x, y=self.y, group=gameobject.GAMEOBJECTS, batch=self.batch)
         self.sprite.update(scale_x=0.05, scale_y=0.05)
 
         # Size of enemy
@@ -63,11 +63,10 @@ class Enemy(GameObject):
 
     def updateHitbox(self):
         self.hitbox.set_hitbox_position(self.x, self.y)
-        print(self.hitbox.get_hitbox_position()[1])
 
     def update(self, dt):
-        if(self.active):
-            if(self.direction):
+        if (self.active):
+            if (self.direction):
                 self.x += self.speed * dt
                 self.sprite.update(x=self.x)
                 if (self.x >= self.rightBoorder):
@@ -88,14 +87,14 @@ class Enemy(GameObject):
                     self.enemyDie()
 
             self.updateHitbox()
-            
+
             global shoot_cooldown
             if random.randrange(0, 18) == self.positionInMesh and shoot_cooldown < 0:
-                #print("zt")
+                # print("zt")
 
                 shoot_cooldown = self.cooldown_time
-                projectile.spawn(self.x + self.enemyWidth / 2, self.y + self.enemyHeight / 2, hitbox.HitMask.PLAYER, projectile.Direction.DOWN, self.batch)
-
+                projectile.spawn(self.x + self.enemyWidth / 2, self.y + self.enemyHeight / 2, hitbox.HitMask.PLAYER,
+                                 projectile.Direction.DOWN, self.batch)
 
     # deleting all the attributes. There is no way for an object to delete itslelf
     def enemyDie(self):
@@ -111,6 +110,7 @@ class Enemy(GameObject):
         del self.leftBoorder
 
     def on_collision(self):
+        hitbox.debug_hitboxs.remove(self.hitbox)
         self.enemyDie()
 
 
@@ -133,7 +133,8 @@ class EnemyMesh:
         self.enemies = []
         for i in range(enemyCount):
             self.enemies.append(Enemy(i * enemieWidth + 200, 620, 50, '../assets/enemy_updated.png', i, batch))
-            self.enemies.append(Enemy(i * enemieWidth + 200, 620 - enemieHeight, 50, '../assets/enemy_updated.png', i, batch))
+            self.enemies.append(
+                Enemy(i * enemieWidth + 200, 620 - enemieHeight, 50, '../assets/enemy_updated.png', i, batch))
             self.enemies.append(
                 Enemy(i * enemieWidth + 200, 620 - enemieHeight * 2, 50, '../assets/enemy_updated.png', i, batch))
 

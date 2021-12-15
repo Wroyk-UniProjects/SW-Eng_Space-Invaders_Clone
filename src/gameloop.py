@@ -16,7 +16,7 @@ from Player import Player
 
 class GameBoard:
     window: Window = None
-    moving_labels: GameObject = None
+
     game_objects = []
 
     def __init__(self, window: Window, game_name: str):
@@ -27,10 +27,8 @@ class GameBoard:
 
         self.alive = False
 
-        self.physics_fps = 120
-        self.draw_fps = 60
-        self.last_scheduled_update = time.time()
-        self.last_scheduled_draw = time.time()
+        self.target_ups = 120.0
+        self.target_fps = 60.0
 
         self.fps_display = FPSDisplay(window)
 
@@ -39,22 +37,15 @@ class GameBoard:
         #self.game_objects.append(RunningLabels(self.batch))
         self.game_objects.append(Player(50, 50, '../assets/player.png', self.batch))
 
-        projectile.spawn(self.window.width / 2, 0, HitMask.ENEMY, projectile.Direction.UP, self.batch)
+        #projectile.spawn(self.window.width / 2, 0, HitMask.ENEMY, projectile.Direction.UP, self.batch)
 
         # adding multiple Enemies to game_objects
         enemyMesh1 = EnemyMesh(6, self.batch)
         enemy_list = enemyMesh1.getEnemyMesh()
         self.game_objects = enemy_list + self.game_objects
 
-    def on_draw(self):
+    def render(self):
         self.window.clear()
-
-        # !!!deprecated will be remove!!
-        # call draw() Method from all GameObjects
-        for game_object in self.game_objects:
-            if hasattr(game_object, "draw"):
-                game_object.draw()
-                pass
 
         self.batch.draw()
         hitbox.debug_hitbox_batch.draw()
@@ -77,28 +68,30 @@ class GameBoard:
                     #print(f"{current_projectile}; {game_object}")
                     current_projectile.on_collision()
                     if hasattr(game_object, "on_collision"):
-                        hitbox.debug_hitboxs.remove(game_object.hitbox)
                         game_object.on_collision()
                     break
-
         enemy.shoot_cooldown -= dt
         hitbox.debug_hitbox_update()
 
     def run(self):
         # clock.schedule(self.update)
         self.alive = True
-
+        last_scheduled_update = time.time()
+        last_scheduled_frame = time.time()
         # pyglet.app.run()
         while self.alive == 1:
-            if time.time() - self.last_scheduled_update > 1 / self.physics_fps:
-                self.update(time.time() - self.last_scheduled_update)
-                self.last_scheduled_update = time.time()
 
-            if self.draw_fps and time.time() - self.last_scheduled_draw > 1 / self.draw_fps:
-                self.on_draw()
-                self.last_scheduled_draw = time.time()
-            elif self.draw_fps is None:
-                self.on_draw()
+            # physics loop
+            if time.time() - last_scheduled_update > 1.0 / self.target_ups:
+                self.update(time.time() - last_scheduled_update)
+                last_scheduled_update = time.time()
+
+            # rendering loop
+            if self.target_fps and time.time() - last_scheduled_frame > 1.0 / self.target_fps:
+                self.render()
+                last_scheduled_frame = time.time()
+            elif self.target_fps is None:
+                self.render()
 
             event = self.window.dispatch_events()
 
