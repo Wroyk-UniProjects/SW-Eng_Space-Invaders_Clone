@@ -110,8 +110,9 @@ class Enemy(GameObject):
         del self.leftBoorder
 
     def on_collision(self):
-        hitbox.debug_hitboxs.remove(self.hitbox)
-        self.enemyDie()
+        if self.active:
+            hitbox.debug_hitboxs.remove(self.hitbox)
+            self.enemyDie()
 
 
 # Mesh creates multiple Enemies
