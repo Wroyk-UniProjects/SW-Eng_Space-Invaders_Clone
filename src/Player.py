@@ -7,6 +7,7 @@ import projectile
 from gameobject import GameObject
 from hitbox import Hitbox, HitMask
 
+import time
 
 class Player (GameObject):
     def __init__(self, startx, starty, icon, batch):
@@ -16,6 +17,8 @@ class Player (GameObject):
         self.velocity = 0
         self.num_of_lives = 3
         self.batch = batch
+
+        self.last_shot = 0
 
         self.hitbox = Hitbox(self.startx, self.starty, 100, 100)
         self.hitbox.mask = HitMask.PLAYER
@@ -36,8 +39,8 @@ class Player (GameObject):
     # shooting
     def shootprojectile(self):
         if self.active:
-
             projectile.spawn(self.startx, self.starty, HitMask.ENEMY, projectile.Direction.UP, self.batch)
+
 
     def on_key_press(self, symbol, modifiers):
         if symbol is key.D or symbol is key.RIGHT:
@@ -51,7 +54,9 @@ class Player (GameObject):
         elif symbol is key.A or symbol is key.LEFT:
             self.velocity = 0
         elif symbol is key.SPACE:
-            self.shootprojectile()
+            if (time.time() - self.last_shot) > 2:
+                self.last_shot = time.time()
+                self.shootprojectile()
 
     def on_collision(self):
         self.num_of_lives -= 1
