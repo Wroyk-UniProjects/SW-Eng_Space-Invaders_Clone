@@ -15,9 +15,10 @@ class Player (GameObject):
         self.icon = icon
         self.velocity = 0
         self.num_of_lives = 3
+        self.batch = batch
 
         self.hitbox = Hitbox(self.startx, self.starty, 100, 100)
-        #self.projectile = Projectiles(self.startx, self.starty, 100, 100, 20, batch1)
+        self.hitbox.mask = HitMask.PLAYER
 
         image = pyglet.image.load(self.icon)
         self.sprite = Sprite(image, x=self.startx, y=self.starty, batch=batch)
@@ -34,7 +35,9 @@ class Player (GameObject):
 
     # shooting
     def shootprojectile(self):
-        Projectiles()
+        if self.active:
+
+            projectile.spawn(self.startx, self.starty, HitMask.ENEMY, projectile.Direction.UP, self.batch)
 
     def on_key_press(self, symbol, modifiers):
         if symbol is key.D or symbol is key.RIGHT:
