@@ -110,7 +110,6 @@ class GameBoard:
                     #print(f"{current_projectile}; {game_object}")
                     current_projectile.on_collision()
                     if hasattr(game_object, "on_collision"):
-                        hitbox.debug_hitboxs.remove(game_object.hitbox)
                         game_object.on_collision()
                     break
 

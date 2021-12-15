@@ -27,6 +27,7 @@ class Projectile(GameObject, Hitbox):
         # super().__init__(batch)
         self.x = x
         self.y = y
+
         imag = pyglet.resource.image(image)
         self.sprite = Sprite(imag, x, y, group=PROJECTILES, batch=batch)
 
