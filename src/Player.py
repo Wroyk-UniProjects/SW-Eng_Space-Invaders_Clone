@@ -39,8 +39,8 @@ class Player (GameObject):
     # shooting
     def shootprojectile(self):
         if self.active:
-
             projectile.spawn(self.startx, self.starty, HitMask.ENEMY, projectile.Direction.UP, self.batch)
+
 
     def on_key_press(self, symbol, modifiers):
         if symbol is key.D or symbol is key.RIGHT:
@@ -54,7 +54,9 @@ class Player (GameObject):
         elif symbol is key.A or symbol is key.LEFT:
             self.velocity = 0
         elif symbol is key.SPACE:
-            self.shootprojectile()
+            if (time.time() - self.last_shot) > 2:
+                self.last_shot = time.time()
+                self.shootprojectile()
 
     def moveleft(self):
         self.velocity = -400
