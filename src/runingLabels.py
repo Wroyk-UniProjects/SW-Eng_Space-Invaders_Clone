@@ -4,11 +4,9 @@ from pyglet.text import Label
 
 from gameobject import GameObject, UI, GAMEOBJECTS
 from hitbox import Hitbox
-from pyglet.window import Window
 
 
 class RunningLabels(GameObject):
-    window: Window = None
     batch: pyglet.graphics.Batch() = None
 
     def __init__(self, batch):
@@ -24,9 +22,6 @@ class RunningLabels(GameObject):
     def update(self, dt):
         pass
         # self.labelOnStart.x += 60 * dt  # corrected for Delta t
-
-    def setWindow(self, window: Window):
-        self.window = window
 
     def createLabel(self, text):
         startLabel = Label(text,

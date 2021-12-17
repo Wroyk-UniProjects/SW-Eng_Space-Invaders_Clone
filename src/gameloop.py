@@ -79,22 +79,19 @@ class GameBoard:
 
     def renderStartScene(self):
         self.window.clear()
-        self.StartingLabel.setWindow(self.window)
         self.StartingLabel.createLabel('Press ENTER to start the game...')
         self.batch_startScreen.draw()
         self.window.flip()
 
     def renderStopScene(self):
         self.window.clear()
-        self.StopLabel.setWindow(self.window)
         self.StopLabel.createLabel('The game has been stopped...')
         self.batch_stopScreen.draw()
         self.window.flip()
 
     def renderLoseScene(self):
         self.window.clear()
-        self.LoseLabel.setWindow(self.window)
-        self.LoseLabel.createLabel('The player has died... Game Over!')
+        self.LoseLabel.createLabel('The player has died... Game over!')
         self.batch_loseScreen.draw()
         self.window.flip()
 
@@ -127,7 +124,7 @@ class GameBoard:
         while self.alive == 1:
 
             ####################################################
-            if self.gamestate.checkIfGameStarted() and not self.gamestate.checkIfGameStopped() and self.gamestate.player.active:
+            if self.gamestate.checkIfGameStarted() and not self.gamestate.checkIfGameStopped() and not self.gamestate.getLoseStatus():
                 # physics loop
                 if time.time() - last_scheduled_update > 1.0 / self.target_ups:
                     self.update(time.time() - last_scheduled_update)

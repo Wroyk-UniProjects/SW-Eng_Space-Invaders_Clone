@@ -6,7 +6,7 @@ from enemy import Enemy
 
 class gamestate:
     player: Player = None
-    enemies: Enemy = []
+    enemiesArr = []
     window: Window = None
     gameStarted = None
     gameStopped = None
@@ -17,7 +17,8 @@ class gamestate:
         self.gameLost = False
         self.gameStarted = False
         self.gameStopped = False
-        self.enemies = enemies
+        for i in enemies:
+            self.enemiesArr.append(i)
         self.player = player
 
     def on_key_press(self, symbol, modifiers):
@@ -41,3 +42,9 @@ class gamestate:
 
     def update(self, dt):
         self.checkIfPlayerDead()
+        enemyIndex = 0
+        for enemy in self.enemiesArr:
+            if not enemy.active:
+                self.enemiesArr.pop(enemyIndex)
+            enemyIndex += 1
+        print('Enemies left: ' + str(len(self.enemiesArr)))
