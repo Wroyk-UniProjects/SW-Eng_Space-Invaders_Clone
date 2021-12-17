@@ -11,7 +11,10 @@ from enemy import Enemy, EnemyMesh
 from gameobject import GameObject
 from hitbox import HitMask
 from runingLabels import RunningLabels
+from pyglet.window import key
 from Player import Player
+from gamestate import gamestate
+from time import sleep
 
 
 class GameBoard:
@@ -19,8 +22,16 @@ class GameBoard:
 
     game_objects = []
 
+    gamestate = None
+    StartingLabel: RunningLabels = None
+    StopLabel: RunningLabels = None
+    LoseLabel: RunningLabels = None
+
     def __init__(self, window: Window, game_name: str):
         self.batch = pyglet.graphics.Batch()
+        self.batch_startScreen = pyglet.graphics.Batch()
+        self.batch_stopScreen = pyglet.graphics.Batch()
+        self.batch_loseScreen = pyglet.graphics.Batch()
         self.window = window
         self.window.push_handlers(self)
         self.window.set_caption(game_name)
@@ -32,17 +43,30 @@ class GameBoard:
 
         self.fps_display = FPSDisplay(window)
 
+
     def setup(self):
         # setup stuff
-        #self.game_objects.append(RunningLabels(self.batch))
-        self.game_objects.append(Player(50, 50, '../assets/player.png', self.batch))
-
-        #projectile.spawn(self.window.width / 2, 0, HitMask.ENEMY, projectile.Direction.UP, self.batch)
 
         # adding multiple Enemies to game_objects
         enemyMesh1 = EnemyMesh(6, self.batch)
         enemy_list = enemyMesh1.getEnemyMesh()
-        self.game_objects = enemy_list + self.game_objects
+        player = Player(50, 50, '../assets/player.png', self.batch)
+
+        self.gamestate = gamestate(self.window, player, enemy_list)
+        self.game_objects.append(self.gamestate)
+
+        self.StartingLabel = RunningLabels(self.batch_startScreen)
+        self.game_objects.append(self.StartingLabel)
+
+        self.StopLabel = RunningLabels(self.batch_stopScreen)
+        self.game_objects.append(self.StopLabel)
+
+        self.LoseLabel = RunningLabels(self.batch_loseScreen)
+        self.game_objects.append(self.LoseLabel)
+
+        self.game_objects.append(player)
+        self.game_objects += enemy_list
+        # projectile.spawn(self.window.width / 2, 0, HitMask.ENEMY, projectile.Direction.UP, self.batch)
 
     def render(self):
         self.window.clear()
@@ -51,6 +75,27 @@ class GameBoard:
         hitbox.debug_hitbox_batch.draw()
 
         self.fps_display.draw()
+        self.window.flip()
+
+    def renderStartScene(self):
+        self.window.clear()
+        self.StartingLabel.setWindow(self.window)
+        self.StartingLabel.createLabel('Press ENTER to start the game...')
+        self.batch_startScreen.draw()
+        self.window.flip()
+
+    def renderStopScene(self):
+        self.window.clear()
+        self.StopLabel.setWindow(self.window)
+        self.StopLabel.createLabel('The game has been stopped...')
+        self.batch_stopScreen.draw()
+        self.window.flip()
+
+    def renderLoseScene(self):
+        self.window.clear()
+        self.LoseLabel.setWindow(self.window)
+        self.LoseLabel.createLabel('The player has died... Game Over!')
+        self.batch_loseScreen.draw()
         self.window.flip()
 
     def update(self, dt: float):
@@ -81,19 +126,45 @@ class GameBoard:
         # pyglet.app.run()
         while self.alive == 1:
 
-            # physics loop
-            if time.time() - last_scheduled_update > 1.0 / self.target_ups:
-                self.update(time.time() - last_scheduled_update)
-                last_scheduled_update = time.time()
-
-            # rendering loop
-            if self.target_fps and time.time() - last_scheduled_frame > 1.0 / self.target_fps:
-                self.render()
-                last_scheduled_frame = time.time()
-            elif self.target_fps is None:
-                self.render()
-
+            ####################################################
+            if self.gamestate.checkIfGameStarted() and not self.gamestate.checkIfGameStopped() and self.gamestate.player.active:
+                # physics loop
+                if time.time() - last_scheduled_update > 1.0 / self.target_ups:
+                    self.update(time.time() - last_scheduled_update)
+                    last_scheduled_update = time.time()
+                # rendering loop
+                if self.target_fps and time.time() - last_scheduled_frame > 1.0 / self.target_fps:
+                    self.render()
+                    last_scheduled_frame = time.time()
+                elif self.target_fps is None:
+                    self.render()
+            elif self.gamestate.checkIfGameStopped():
+                self.renderStopScene()
+                sleep(2)
+                self.alive = False
+            elif not self.gamestate.player.active:
+                self.renderLoseScene()
+                sleep(2)
+                self.alive = False
+            else:
+                self.renderStartScene()
             event = self.window.dispatch_events()
+            ####################################################
+
+            # # physics loop
+            # if time.time() - last_scheduled_update > 1.0 / self.target_ups:
+            #     self.update(time.time() - last_scheduled_update)
+            #     last_scheduled_update = time.time()
+            #
+            # # rendering loop
+            # if self.target_fps and time.time() - last_scheduled_frame > 1.0 / self.target_fps:
+            #     self.render()
+            #     last_scheduled_frame = time.time()
+            # elif self.target_fps is None:
+            #     self.render()
+            #
+            # event = self.window.dispatch_events()
+
 
     def on_close(self):
         self.alive = False
