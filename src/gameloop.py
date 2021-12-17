@@ -144,7 +144,7 @@ class GameBoard:
                 self.alive = False
             elif not self.gamestate.player.active:
                 self.renderLoseScene()
-                sleep(2)
+                sleep(3)
                 self.alive = False
             else:
                 self.renderStartScene()

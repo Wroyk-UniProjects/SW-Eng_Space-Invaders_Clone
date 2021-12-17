@@ -5,7 +5,6 @@ from enemy import Enemy
 
 
 class gamestate:
-    gameObjs = []
     player: Player = None
     enemies: Enemy = []
     window: Window = None
