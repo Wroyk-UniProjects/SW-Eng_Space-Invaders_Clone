@@ -17,8 +17,8 @@ class gamestate:
         self.gameLost = False
         self.gameStarted = False
         self.gameStopped = False
-        for i in enemies:
-            self.enemiesArr.append(i)
+        for enemy in enemies:
+            self.enemiesArr.append(enemy)
         self.player = player
 
     def on_key_press(self, symbol, modifiers):
