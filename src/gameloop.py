@@ -52,7 +52,7 @@ class GameBoard:
         enemy_list = enemyMesh1.getEnemyMesh()
         player = Player(50, 50, '../assets/player.png', self.batch)
 
-        self.gamestate = gamestate(self.window, player, enemy_list)
+        self.gamestate = gamestate(player, enemy_list)
         self.game_objects.append(self.gamestate)
 
         self.StartingLabel = RunningLabels(self.batch_startScreen)

@@ -7,13 +7,11 @@ from enemy import Enemy
 class gamestate:
     player: Player = None
     enemiesArr = []
-    window: Window = None
     gameStarted = None
     gameStopped = None
     gameLost = None
 
-    def __init__(self, windows, player, enemies):
-        self.window = windows
+    def __init__(self, player, enemies):
         self.gameLost = False
         self.gameStarted = False
         self.gameStopped = False
