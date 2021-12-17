@@ -24,9 +24,9 @@ class RunningLabels(GameObject):
         # self.labelOnStart.x += 60 * dt  # corrected for Delta t
 
     def createLabel(self, text):
-        startLabel = Label(text,
+        label = Label(text,
                            font_name='monogramextended',
                            font_size=36,
                            x=1280 // 2,
                            y=720 // 2, anchor_x='center', anchor_y='center', group=UI, batch=self.batch)
-        return startLabel
+        return label
