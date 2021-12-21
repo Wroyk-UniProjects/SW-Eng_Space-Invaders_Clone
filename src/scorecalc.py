@@ -15,4 +15,9 @@ class scorecalc:
         self.score = round(self.score/2)
 
     def add_points_for_level_complete(self):
+        #might need to update this based on what the scores look like
         self.score += 10000
+
+    def subtract_points_for_broken_shield(self):
+        #also need to update this probably
+        self.score -= 500
