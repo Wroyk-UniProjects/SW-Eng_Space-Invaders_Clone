@@ -10,11 +10,13 @@ class gamestate:
     gameStarted = None
     gameStopped = None
     gameLost = None
+    gameWon = None
 
     def __init__(self, player, enemies):
         self.gameLost = False
         self.gameStarted = False
         self.gameStopped = False
+        self.gameWon = False
         for enemy in enemies:
             self.enemiesArr.append(enemy)
         self.player = player
@@ -35,6 +37,10 @@ class gamestate:
         if not self.player.active:
             self.gameLost = True
 
+    def checkIfPlayerWon(self):
+        if len(self.enemiesArr) <= 0:
+            self.gameWon = True
+
     def getLoseStatus(self):
         return self.gameLost
 
@@ -45,4 +51,5 @@ class gamestate:
             if not enemy.active:
                 self.enemiesArr.pop(enemyIndex)
             enemyIndex += 1
+        self.checkIfPlayerWon()
         print('Enemies left: ' + str(len(self.enemiesArr)))

@@ -112,6 +112,9 @@ class GameBoard:
                     if hasattr(game_object, "on_collision"):
                         game_object.on_collision()
                     break
+
+        self.gamestate.update(dt)
+
         enemy.shoot_cooldown -= dt
         hitbox.debug_hitbox_update()
 
@@ -125,6 +128,7 @@ class GameBoard:
 
             ####################################################
             if self.gamestate.checkIfGameStarted() and not self.gamestate.checkIfGameStopped() and not self.gamestate.getLoseStatus():
+
                 # physics loop
                 if time.time() - last_scheduled_update > 1.0 / self.target_ups:
                     self.update(time.time() - last_scheduled_update)
@@ -135,16 +139,25 @@ class GameBoard:
                     last_scheduled_frame = time.time()
                 elif self.target_fps is None:
                     self.render()
+
             elif self.gamestate.checkIfGameStopped():
+
                 self.renderStopScene()
                 sleep(2)
                 self.alive = False
-            elif not self.gamestate.player.active:
+
+            elif not self.gamestate.player.active:  # <--
+
                 self.renderLoseScene()
                 sleep(3)
                 self.alive = False
+
+            elif self.gamestate.gameWon:  # <--
+                pass
+
             else:
                 self.renderStartScene()
+
             event = self.window.dispatch_events()
             ####################################################
 
