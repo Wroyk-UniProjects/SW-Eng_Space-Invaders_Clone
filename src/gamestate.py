@@ -44,6 +44,11 @@ class gamestate:
     def getLoseStatus(self):
         return self.gameLost
 
+    def jsonLoadLeaderboard(self):
+        with open(resource.file('leaderboard.json')) as leaderboard:
+            jsonData = json.load(leaderboard)
+        return jsonData
+
     def update(self, dt):
         self.checkIfPlayerDead()
         enemyIndex = 0
