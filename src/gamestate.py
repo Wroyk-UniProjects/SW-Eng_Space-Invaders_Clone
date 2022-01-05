@@ -70,10 +70,22 @@ class GameState:
     def getLoseStatus(self):
         return self.gameLost
 
-    def jsonLoadLeaderboard(self):
-        with open(resource.file('leaderboard.json')) as leaderboard:
-            jsonData = json.load(leaderboard)
-        return jsonData
+    def loadLeaderboard(self):
+        with open(resource.file("leaderboard.json", "r+")) as leaderboard:
+            json_data = json.load(leaderboard)
+        return json_data
+
+    def dumpToLeaderboard(self, new_entry):
+        with open(resource.file("leaderboard.json", "r+")) as lb:
+            json.dump(new_entry, lb, indent=4)
+
+    #new_score is the points earned in this try
+    def updateLeaderboard(self, new_score):
+        updated_leaderboard = self.loadLeaderboard()
+        name = input("Your name: ")
+        row = {name: new_score}
+        updated_leaderboard.update(row)
+        self.dumpToLeaderboard(updated_leaderboard)
 
     def update(self, dt):
         self.checkIfPlayerDead()
