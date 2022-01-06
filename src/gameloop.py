@@ -62,12 +62,13 @@ class GameBoard:
         # display player lives
         self.StatsLabel = RunningLabels(self.batch_onscreenStats)
         self.game_objects.append(self.StatsLabel)
-        life_left = player.num_of_lives
-        life_counter = pyglet.text.Label('Lives remaining: ')
+        #life_left = player.num_of_lives
+        #life_counter = pyglet.text.Label('Lives remaining: ')
 
         # player points - insert points gained in Julia's point system
 
-        # enimies remaining
+        # enemies remaining
+        ###
 
         self.gamestate = gamestate(player, enemy_list)
         self.game_objects.append(self.gamestate)
