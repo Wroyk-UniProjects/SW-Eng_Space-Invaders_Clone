@@ -8,8 +8,12 @@ from gameobject import GameObject
 from hitbox import Hitbox, HitMask
 
 import time
+from pyglet.text import Label
+from gameobject import UI
 
-class Player (GameObject):
+
+class Player(GameObject):
+
     def __init__(self, startx, starty, icon, batch):
         self.startx = startx
         self.starty = starty
@@ -29,7 +33,10 @@ class Player (GameObject):
 
         self.active = True
 
-    #movement functions
+        self.lives_left_label = Label('Lives left: ' + str(self.num_of_lives), font_name='monogramextended', font_size= 20, x=10, y=700, batch=self.batch,
+                                      group=UI)
+
+    # movement functions
     def moveright(self):
         self.velocity = 400
 
@@ -61,7 +68,6 @@ class Player (GameObject):
     def shootprojectile(self):
         if self.active:
             projectile.spawn(self.startx, self.starty, HitMask.ENEMY, projectile.Direction.UP, self.batch)
-
 
     def on_key_press(self, symbol, modifiers):
         if symbol is key.D or symbol is key.RIGHT:
@@ -114,12 +120,14 @@ class Player (GameObject):
 
     def update(self, dt):
         if self.active:
-            self.startx += self.velocity*dt
+            self.startx += self.velocity * dt
             if self.startx <= -self.sprite.width:
-                self.startx = 1280-self.sprite.width
+                self.startx = 1280 - self.sprite.width
             elif self.startx >= 1280:
                 self.startx = 0
             self.sprite.x = self.startx
             self.hitbox.x = self.startx
 
+        self.lives_left_label.text = 'Lives left: ' + str(self.num_of_lives)
 
+    # player needs self.active methods for lives functions
