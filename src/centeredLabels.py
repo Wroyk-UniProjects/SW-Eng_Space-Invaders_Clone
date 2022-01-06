@@ -6,7 +6,7 @@ from gameobject import GameObject, UI, GAMEOBJECTS
 from hitbox import Hitbox
 
 
-class RunningLabels(GameObject):
+class CenteredLabel(GameObject):
     batch: pyglet.graphics.Batch() = None
 
     def __init__(self, batch):
@@ -17,7 +17,7 @@ class RunningLabels(GameObject):
         # self.s.update(scale_x=2, scale_y=2)
         # self.hitbox = Hitbox(300, 300, self.s.width, self.s.height)
         # https://pyglet.readthedocs.io/en/latest/programming_guide/graphics.html#batches-and-groups-in-other-modules
-        # print(f"{self.label.x}:{self.label1.x}")
+        # print(f"{self.label.x}:{self.label1.x}") 
 
     def update(self, dt):
         pass
