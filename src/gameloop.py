@@ -28,8 +28,10 @@ class GameBoard:
     StartingLabel: RunningLabels = None
     StopLabel: RunningLabels = None
     LoseLabel: RunningLabels = None
+    StatsLabel: RunningLabels = None
 
     def __init__(self, window: Window, game_name: str):
+
         self.batch = pyglet.graphics.Batch()
         self.batch_startScreen = pyglet.graphics.Batch()
         self.batch_stopScreen = pyglet.graphics.Batch()
@@ -37,6 +39,8 @@ class GameBoard:
         self.window = window
         self.window.push_handlers(self)
         self.window.set_caption(game_name)
+
+        self.batch_onscreenStats = pyglet.graphics.Batch()
 
         self.alive = False
 
@@ -53,6 +57,17 @@ class GameBoard:
         enemyMesh1 = EnemyMesh(6, self.batch)
         enemy_list = enemyMesh1.getEnemyMesh()
         player = Player(50, 50, '../assets/player.png', self.batch)
+
+       ###
+        # display player lives
+        self.StatsLabel = RunningLabels(self.batch_onscreenStats)
+        self.game_objects.append(self.StatsLabel)
+        life_left = player.num_of_lives
+        life_counter = pyglet.text.Label('Lives remaining: ')
+
+        # player points - insert points gained in Julia's point system
+
+        # enimies remaining
 
         self.gamestate = gamestate(player, enemy_list)
         self.game_objects.append(self.gamestate)
@@ -81,6 +96,8 @@ class GameBoard:
 
         self.fps_display.draw()
         self.window.flip()
+
+        self.batch_onscreenStats.draw()
 
     def renderStartScene(self):
         self.window.clear()
