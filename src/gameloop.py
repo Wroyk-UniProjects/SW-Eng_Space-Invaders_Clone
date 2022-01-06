@@ -10,7 +10,7 @@ import projectile
 from enemy import Enemy, EnemyMesh
 from gameobject import GameObject
 from hitbox import HitMask
-from runingLabels import RunningLabels
+from centeredLabels import CenteredLabel
 from pyglet.window import key
 from Player import Player
 from gamestate import gamestate
@@ -25,10 +25,10 @@ class GameBoard:
     game_objects = []
 
     gamestate = None
-    StartingLabel: RunningLabels = None
-    StopLabel: RunningLabels = None
-    LoseLabel: RunningLabels = None
-    StatsLabel: RunningLabels = None
+    StartingLabel: CenteredLabel = None
+    StopLabel: CenteredLabel = None
+    LoseLabel: CenteredLabel = None
+    StatsLabel: CenteredLabel = None
 
     def __init__(self, window: Window, game_name: str):
 
@@ -73,13 +73,13 @@ class GameBoard:
         self.gamestate = gamestate(player, enemy_list)
         self.game_objects.append(self.gamestate)
 
-        self.StartingLabel = RunningLabels(self.batch_startScreen)
+        self.StartingLabel = CenteredLabel(self.batch_startScreen)
         self.game_objects.append(self.StartingLabel)
 
-        self.StopLabel = RunningLabels(self.batch_stopScreen)
+        self.StopLabel = CenteredLabel(self.batch_stopScreen)
         self.game_objects.append(self.StopLabel)
 
-        self.LoseLabel = RunningLabels(self.batch_loseScreen)
+        self.LoseLabel = CenteredLabel(self.batch_loseScreen)
         self.game_objects.append(self.LoseLabel)
 
         self.game_objects.append(player)

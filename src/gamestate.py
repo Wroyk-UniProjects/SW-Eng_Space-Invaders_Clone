@@ -57,4 +57,4 @@ class gamestate:
                 self.enemiesArr.pop(enemyIndex)
             enemyIndex += 1
         self.checkIfPlayerWon()
-        print('Enemies left: ' + str(len(self.enemiesArr)))
+        # print('Enemies left: ' + str(len(self.enemiesArr)))
