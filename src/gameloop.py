@@ -16,6 +16,8 @@ from Player import Player
 from gamestate import gamestate
 from time import sleep
 
+from scorecalc import Scorecalc
+
 
 class GameBoard:
     window: Window = None
@@ -67,6 +69,9 @@ class GameBoard:
         self.game_objects.append(player)
         self.game_objects += enemy_list
         # projectile.spawn(self.window.width / 2, 0, HitMask.ENEMY, projectile.Direction.UP, self.batch)
+
+        self.scorecalc = Scorecalc(self.batch)
+        self.game_objects.append(self.scorecalc)
 
     def render(self):
         self.window.clear()
