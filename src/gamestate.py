@@ -87,13 +87,14 @@ class GameState:
         print(printableLB)
 
     #new_score is the points earned in this try
-    def updateLeaderboard(self, new_score):
+    def updateLeaderboard(self, new_score, name):
         updated_leaderboard = self.loadLeaderboard()
-        name = input("Your name: ")
+        #name = input("Your name: ")
+
         row = {name: new_score}
         updated_leaderboard.update(row)
         self.dumpToLeaderboard(updated_leaderboard)
-        self.printLeaderboard()
+        #self.printLeaderboard()
 
 
     def update(self, dt):

@@ -35,6 +35,8 @@ class GameBoard:
         self.batch_startScreen = pyglet.graphics.Batch()
         self.batch_stopScreen = pyglet.graphics.Batch()
         self.batch_loseScreen = pyglet.graphics.Batch()
+       # self.batch_savingScreen = pyglet.graphics.Batch()
+       # self.batch_leaderboardScreen = pyglet.graphics.Batch()
         self.window = window
         self.window.push_handlers(self)
         self.window.set_caption(game_name)
