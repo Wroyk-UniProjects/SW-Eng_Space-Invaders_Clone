@@ -1,3 +1,4 @@
+import json
 import time
 from threading import Thread
 
@@ -11,6 +12,7 @@ from centeredLabels import CenteredLabel
 from mainscene import MainScene
 from gamestate import GAME_STATE, GameStates
 from time import sleep
+from tkinter import *
 
 from startmenu import StartMenu
 
@@ -37,6 +39,7 @@ class GameBoard:
         self.batch_loseScreen = pyglet.graphics.Batch()
        # self.batch_savingScreen = pyglet.graphics.Batch()
        # self.batch_leaderboardScreen = pyglet.graphics.Batch()
+        self.batch_savingScreen = pyglet.graphics.Batch()
         self.window = window
         self.window.push_handlers(self)
         self.window.set_caption(game_name)
