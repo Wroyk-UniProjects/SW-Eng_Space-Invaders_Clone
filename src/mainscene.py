@@ -1,4 +1,5 @@
 from pyglet.text import Label
+from pyglet.window import key
 
 import projectile
 from enemy import EnemyMesh
@@ -10,6 +11,7 @@ from shields import shieldFactory
 
 class MainScene(GameScene):
     active = False
+    paused = False
 
     game_objects = None
 
@@ -40,8 +42,12 @@ class MainScene(GameScene):
 
         player = Player(50, 50, '../assets/player.png', self.batch)
 
+        self.game_objects.append(player)
+        self.game_objects += enemy_list
+
         self.scorecalc = Scorecalc(self.batch, player, enemy_list.copy())
         self.game_objects.append(self.scorecalc)
+
 
     def update(self, dt):
         # call update() Method from all GameObjects
@@ -60,3 +66,29 @@ class MainScene(GameScene):
                     if hasattr(game_object, "on_collision"):
                         game_object.on_collision()
                     break
+
+    def on_key_press(self, symbol, modifiers):
+
+        if symbol == key.P:
+            if self.paused:
+                self.paused = False
+            else:
+                self.paused = True
+
+        if not self.paused:
+            for game_object in self.game_objects:
+                if hasattr(game_object, "on_key_press"):
+                    game_object.on_key_press(symbol, modifiers)
+
+    def on_key_release(self, symbol, modifiers):
+        if not self.paused:
+            for game_object in self.game_objects:
+                if hasattr(game_object, "on_key_release"):
+                    game_object.on_key_release(symbol, modifiers)
+
+    def on_mouse_press(self, x, y, button, modifiers):
+        if not self.paused:
+            for game_object in self.game_objects:
+                if hasattr(game_object, "on_mouse_press"):
+                    game_object.on_mouse_press(x, y, button, modifiers)
+

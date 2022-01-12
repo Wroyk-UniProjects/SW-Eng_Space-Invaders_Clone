@@ -4,7 +4,7 @@ from enum import Enum
 from pyglet import resource
 from pyglet.window import key
 from pyglet.window import Window
-#from player import Player
+# from player import Player
 from enemy import Enemy
 
 
@@ -17,33 +17,33 @@ class GameStates(Enum):
     LOST = 3
 
 
-STATE: GameStates = GameStates.LUNCHING
+class GameState:
+    # player: Player = None
+    # enemiesArr = []
+    # gameStarted = None
+    # gameStopped = None
+    # gameLost = None
+    # gameWon = None
 
+    state = GameStates.LUNCHING
 
-def set_game_won():
-    gamestate.STATE = GameStates.WON
+    # def __init__(self, player, enemies):
+    # self.gameLost = False
+    # self.gameStarted = False
+    # self.gameStopped = False
+    # self.gameWon = False
+    # for enemy in enemies:
+    # self.enemiesArr.append(enemy)
+    # self.player = player
 
+    def set_game_won(self):
+        self.state = GameStates.WON
 
-def set_game_lost():
-    gamestate.STATE = GameStates.LOST
+    def set_game_lost(self):
+        self.state = GameStates.LOST
 
-
-class gamestate:
-    #player: Player = None
-    enemiesArr = []
-    gameStarted = None
-    gameStopped = None
-    gameLost = None
-    gameWon = None
-
-    def __init__(self, player, enemies):
-        self.gameLost = False
-        self.gameStarted = False
-        self.gameStopped = False
-        self.gameWon = False
-        for enemy in enemies:
-            self.enemiesArr.append(enemy)
-        self.player = player
+    def set_game_state(self, state: GameStates):
+        self.state = state
 
     def on_key_press(self, symbol, modifiers):
         if symbol is key.RETURN or symbol is key.ENTER:
@@ -82,3 +82,7 @@ class gamestate:
             enemyIndex += 1
         self.checkIfPlayerWon()
         # print('Enemies left: ' + str(len(self.enemiesArr)))
+
+
+# Singleton
+GAME_STATE = GameState()
