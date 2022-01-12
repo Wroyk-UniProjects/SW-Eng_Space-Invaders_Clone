@@ -30,7 +30,7 @@ class shield(GameObject):
     def update(self, dt):
         if self.active == True:
             self.sprite.update()
-            print(self.lives)
+            #print(self.lives)
 
     def on_collision(self):
 

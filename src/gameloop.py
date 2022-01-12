@@ -1,4 +1,5 @@
 import time
+from threading import Thread
 
 import pyglet
 from pyglet import clock
@@ -59,7 +60,7 @@ class GameBoard:
         #self.game_objects.append(RunningLabels(self.batch))
         self.lable_game_paused = Label("Game Paused", font_name="monogramextended", font_size=64, x=self.window.width / 2,
                                        y=self.window.height / 2, anchor_x='center', anchor_y='center')
-        print(self.lable_game_paused)
+        #print(self.lable_game_paused)
         #self.lable_game_paused.x -= self.lable_game_paused.width
         #self.lable_game_paused.y -= self.lable_game_paused.height
 
@@ -161,64 +162,63 @@ class GameBoard:
         enemy.shoot_cooldown -= dt
         hitbox.debug_hitbox_update()
 
+    def remove_not_alive_enemies(self):
+        while self.alive == 1:
+            if not self.paused:
+                for game_object in self.game_objects:
+                    if hasattr(game_object, "active") and not game_object.active:
+                        self.game_objects.remove(game_object)
+            sleep(1.0 / self.target_ups)
+
     def run(self):
         # clock.schedule(self.update)
         self.alive = True
         last_scheduled_update = time.time()
         last_scheduled_frame = time.time()
+        garbage_collector = Thread(target=self.remove_not_alive_enemies)
+
+        garbage_collector.start()
         # pyglet.app.run()
         while self.alive == 1:
+            try:
+                if self.gamestate.checkIfGameStarted() and not self.gamestate.checkIfGameStopped() and not self.gamestate.getLoseStatus():
 
-            ####################################################
-            if self.gamestate.checkIfGameStarted() and not self.gamestate.checkIfGameStopped() and not self.gamestate.getLoseStatus():
+                    # physics loop
+                    if time.time() - last_scheduled_update > 1.0 / self.target_ups:
+                        if not self.paused:
+                            self.update(time.time() - last_scheduled_update)
+                        last_scheduled_update = time.time()
+                    # rendering loop
+                    if self.target_fps and time.time() - last_scheduled_frame > 1.0 / self.target_fps:
+                        self.render()
+                        last_scheduled_frame = time.time()
+                    elif self.target_fps is None:
+                        self.render()
 
-                # physics loop
-                if time.time() - last_scheduled_update > 1.0 / self.target_ups:
-                    if not self.paused:
-                        self.update(time.time() - last_scheduled_update)
-                    last_scheduled_update = time.time()
-                # rendering loop
-                if self.target_fps and time.time() - last_scheduled_frame > 1.0 / self.target_fps:
-                    self.render()
-                    last_scheduled_frame = time.time()
-                elif self.target_fps is None:
-                    self.render()
+                elif self.gamestate.checkIfGameStopped():
 
-            elif self.gamestate.checkIfGameStopped():
+                    self.renderStopScene()
+                    sleep(2)
+                    self.alive = False
 
-                self.renderStopScene()
-                sleep(2)
-                self.alive = False
+                elif not self.gamestate.player.active:  # <--
 
-            elif not self.gamestate.player.active:  # <--
+                    self.renderLoseScene()
+                    sleep(3)
+                    self.alive = False
 
-                self.renderLoseScene()
-                sleep(3)
-                self.alive = False
+                elif self.gamestate.gameWon:  # <--
+                    pass
 
-            elif self.gamestate.gameWon:  # <--
-                pass
+                else:
+                    self.renderStartScene()
 
-            else:
-                self.renderStartScene()
+                event = self.window.dispatch_events()
 
-            event = self.window.dispatch_events()
-            ####################################################
-
-            # # physics loop
-            # if time.time() - last_scheduled_update > 1.0 / self.target_ups:
-            #     self.update(time.time() - last_scheduled_update)
-            #     last_scheduled_update = time.time()
-            #
-            # # rendering loop
-            # if self.target_fps and time.time() - last_scheduled_frame > 1.0 / self.target_fps:
-            #     self.render()
-            #     last_scheduled_frame = time.time()
-            # elif self.target_fps is None:
-            #     self.render()
-            #
-            # event = self.window.dispatch_events()
-
+            except KeyboardInterrupt:
+                self.on_close()
+                sleep(0.001)
+        garbage_collector.join()
 
     def on_close(self):
         self.alive = False
