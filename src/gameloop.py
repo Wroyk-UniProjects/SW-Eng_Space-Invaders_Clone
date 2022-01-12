@@ -13,6 +13,8 @@ from hitbox import HitMask
 from centeredLabels import CenteredLabel
 from pyglet.window import key
 from Player import Player
+from shields import shield
+from shields import shieldFactory
 from gamestate import gamestate
 from time import sleep
 
@@ -54,6 +56,11 @@ class GameBoard:
         # setup stuff
 
         # adding multiple Enemies to game_objects
+        self.game_objects.append(shield(200,200,1,self.batch))
+        shieldsFactory = shieldFactory( self.batch)
+        shields_list = shieldsFactory.getShields()
+        self.game_objects = shields_list + self.game_objects
+
         enemyMesh1 = EnemyMesh(6, self.batch)
         enemy_list = enemyMesh1.getEnemyMesh()
         player = Player(50, 50, '../assets/player.png', self.batch)
