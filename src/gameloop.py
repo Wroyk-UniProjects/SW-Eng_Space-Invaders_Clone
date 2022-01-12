@@ -60,7 +60,7 @@ class GameBoard:
 
        ###
         # display player lives
-        self.StatsLabel = RunningLabels(self.batch_onscreenStats)
+        self.StatsLabel = CenteredLabel(self.batch_onscreenStats)
         self.game_objects.append(self.StatsLabel)
         #life_left = player.num_of_lives
         #life_counter = pyglet.text.Label('Lives remaining: ')
