@@ -3,7 +3,7 @@ import json
 from pyglet import resource
 from pyglet.window import key
 from pyglet.window import Window
-from Player import Player
+from player import Player
 from enemy import Enemy
 
 

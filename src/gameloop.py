@@ -13,7 +13,7 @@ from gameobject import GameObject
 from hitbox import HitMask
 from centeredLabels import CenteredLabel
 from pyglet.window import key
-from Player import Player
+from player import Player
 from shields import shield
 from shields import shieldFactory
 from gamestate import gamestate

@@ -4,7 +4,7 @@ from pyglet.window import key
 
 import hitbox
 import projectile
-from gameobject import GameObject
+from gameobject import GameObject, GAMEOBJECTS
 from hitbox import Hitbox, HitMask
 
 import time
@@ -24,12 +24,11 @@ class Player(GameObject):
 
         self.last_shot = 0
 
-        self.hitbox = Hitbox(self.startx, self.starty, 100, 100)
-        self.hitbox.mask = HitMask.PLAYER
-
         image = pyglet.image.load(self.icon)
-        self.sprite = Sprite(image, x=self.startx, y=self.starty, batch=batch)
+        self.sprite = Sprite(image, x=self.startx, y=self.starty, group=GAMEOBJECTS, batch=batch)
         self.sprite.update(scale_x=.75, scale_y=.75)
+
+        self.hitbox = Hitbox(self.startx, self.starty, self.sprite.width, self.sprite.height, HitMask.PLAYER)
 
         self.active = True
 
@@ -45,54 +44,8 @@ class Player(GameObject):
 
     # shooting
     def shootprojectile(self):
-        self.projectile.spawn()
-
-    def on_key_press(self, symbol, modifiers):
-        if symbol is key.D or symbol is key.RIGHT:
-            self.moveright()
-        elif symbol is key.A or symbol is key.LEFT:
-            self.moveleft()
-        elif symbol is key.SPACE:
-            self.shootprojectile()
-
-    def on_key_release(self, symbol, modifier):
-        if symbol is key.D or symbol is key.RIGHT:
-            self.velocity = 0
-        elif symbol is key.A or symbol is key.LEFT:
-            self.velocity = 0
-
-    def moveleft(self):
-        self.velocity = -400
-
-    # shooting
-    def shootprojectile(self):
         if self.active:
-            projectile.spawn(self.startx, self.starty, HitMask.ENEMY, projectile.Direction.UP, self.batch)
-
-    def on_key_press(self, symbol, modifiers):
-        if symbol is key.D or symbol is key.RIGHT:
-            self.moveright()
-        elif symbol is key.A or symbol is key.LEFT:
-            self.moveleft()
-
-    def on_key_release(self, symbol, modifier):
-        if symbol is key.D or symbol is key.RIGHT:
-            self.velocity = 0
-        elif symbol is key.A or symbol is key.LEFT:
-            self.velocity = 0
-        elif symbol is key.SPACE:
-            if (time.time() - self.last_shot) > 2:
-                self.last_shot = time.time()
-                self.shootprojectile()
-
-    def moveleft(self):
-        self.velocity = -400
-
-    # shooting
-    def shootprojectile(self):
-        if self.active:
-            projectile.spawn(self.startx, self.starty, HitMask.ENEMY, projectile.Direction.UP, self.batch)
-
+            projectile.spawn(self.startx + self.sprite.width/2 - 10, self.starty + 10, HitMask.ENEMY, projectile.Direction.UP, self.batch)
 
     def on_key_press(self, symbol, modifiers):
         if symbol is key.D or symbol is key.RIGHT:
@@ -129,5 +82,3 @@ class Player(GameObject):
             self.hitbox.x = self.startx
 
         self.lives_left_label.text = 'Lives left: ' + str(self.num_of_lives)
-
-    # player needs self.active methods for lives functions
