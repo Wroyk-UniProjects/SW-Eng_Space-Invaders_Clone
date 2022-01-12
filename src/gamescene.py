@@ -20,3 +20,15 @@ class GameScene(ABC):
     @abstractmethod
     def update(self, dt):
         pass
+
+    @abstractmethod
+    def on_key_press(self, symbol, modifiers):
+        pass
+
+    @abstractmethod
+    def on_key_release(self, symbol, modifiers):
+        pass
+
+    @abstractmethod
+    def on_mouse_press(self, x, y, button, modifiers):
+        pass

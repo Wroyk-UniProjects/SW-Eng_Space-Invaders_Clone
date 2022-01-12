@@ -7,6 +7,7 @@ from pyglet.text import Label
 from pyglet.window import Window, FPSDisplay, key
 
 import enemy
+import gamestate
 import hitbox
 import projectile
 from enemy import Enemy, EnemyMesh
@@ -20,7 +21,7 @@ from mainscene import MainScene
 from player import Player
 from shields import shield
 from shields import shieldFactory
-from gamestate import gamestate
+from gamestate import GAME_STATE, GameStates
 from time import sleep
 
 from scorecalc import Scorecalc
@@ -61,7 +62,9 @@ class GameBoard:
 
     def setup(self):
         # setup stuff
+
         #self.game_objects.append(RunningLabels(self.batch))
+        # projectile.spawn(self.window.width / 2, 0, HitMask.ENEMY, projectile.Direction.UP, self.batch)
 
         self.main_scene.setup()
 
@@ -79,9 +82,7 @@ class GameBoard:
         self.LoseLabel = CenteredLabel(self.batch_loseScreen)
         self.game_objects.append(self.LoseLabel)
 
-        #self.game_objects.append(player)
-        #self.game_objects += enemy_list
-        # projectile.spawn(self.window.width / 2, 0, HitMask.ENEMY, projectile.Direction.UP, self.batch)
+
 
     def render(self):
         self.window.clear()
@@ -117,18 +118,20 @@ class GameBoard:
 
     def update(self, dt: float):
 
-
-        self.gamestate.update(dt)
+        self.active_scene.update(dt)
+        #self.gamestate.update(dt)
 
         enemy.shoot_cooldown -= dt
         #hitbox.debug_hitbox_update()
 
     def remove_not_alive_enemies(self):
-        while self.alive == 1:
-            if not self.paused:
-                for game_object in self.game_objects:
+        while GAME_STATE.state != GameStates.EXIT:
+            if GAME_STATE.state != GameStates.PAUSED:
+
+                for game_object in self.active_scene.game_objects:
                     if hasattr(game_object, "active") and not game_object.active:
-                        self.game_objects.remove(game_object)
+                        self.active_scene.game_objects.remove(game_object)
+
             sleep(1.0 / self.target_ups)
 
     def run(self):
@@ -140,39 +143,51 @@ class GameBoard:
 
         garbage_collector.start()
         # pyglet.app.run()
-        while self.alive == 1:
+        while GAME_STATE.state != GameStates.EXIT:
             try:
-                if self.gamestate.checkIfGameStarted() and not self.gamestate.checkIfGameStopped() and not self.gamestate.getLoseStatus():
+                # physics loop
+                if time.time() - last_scheduled_update > 1.0 / self.target_ups:
+                    self.update(time.time() - last_scheduled_update)
+                    last_scheduled_update = time.time()
+
+                # rendering loop
+                if self.target_fps and time.time() - last_scheduled_frame > 1.0 / self.target_fps:
+                    self.render()
+                    last_scheduled_frame = time.time()
+                elif self.target_fps is None:
+                    self.render()
+
+                #if self.gamestate.checkIfGameStarted() and not self.gamestate.checkIfGameStopped() and not self.gamestate.getLoseStatus():
 
                     # physics loop
-                    if time.time() - last_scheduled_update > 1.0 / self.target_ups:
-                        if not self.paused:
-                            self.update(time.time() - last_scheduled_update)
-                        last_scheduled_update = time.time()
+                #    if time.time() - last_scheduled_update > 1.0 / self.target_ups:
+                #        if not self.paused:
+                #            self.update(time.time() - last_scheduled_update)
+                #        last_scheduled_update = time.time()
                     # rendering loop
-                    if self.target_fps and time.time() - last_scheduled_frame > 1.0 / self.target_fps:
-                        self.render()
-                        last_scheduled_frame = time.time()
-                    elif self.target_fps is None:
-                        self.render()
+                #    if self.target_fps and time.time() - last_scheduled_frame > 1.0 / self.target_fps:
+                #        self.render()
+                #        last_scheduled_frame = time.time()
+                #    elif self.target_fps is None:
+                #        self.render()
 
-                elif self.gamestate.checkIfGameStopped():
+                #elif self.gamestate.checkIfGameStopped():
 
-                    self.renderStopScene()
-                    sleep(2)
-                    self.alive = False
+                #    self.renderStopScene()
+                #    sleep(2)
+                #    self.alive = False
 
-                elif not self.gamestate.player.active:  # <--
+                #elif not self.gamestate.player.active:  # <--
 
-                    self.renderLoseScene()
-                    sleep(3)
-                    self.alive = False
+                #    self.renderLoseScene()
+                #    sleep(3)
+                #    self.alive = False
 
-                elif self.gamestate.gameWon:  # <--
-                    pass
+                #elif self.gamestate.gameWon:  # <--
+                #    pass
 
-                else:
-                    self.renderStartScene()
+                #else:
+                #    self.renderStartScene()
 
                 event = self.window.dispatch_events()
 
@@ -182,28 +197,13 @@ class GameBoard:
         garbage_collector.join()
 
     def on_close(self):
-        self.alive = False
+        GAME_STATE.set_game_state(GameStates.EXIT)
 
     def on_key_press(self, symbol, modifiers):
-        if symbol == key.P:
-            if self.paused:
-                self.paused = False
-            else:
-                self.paused = True
-
-        if not self.paused:
-            for game_object in self.game_objects:
-                if hasattr(game_object, "on_key_press"):
-                    game_object.on_key_press(symbol, modifiers)
+        self.active_scene.on_key_press(symbol, modifiers)
 
     def on_key_release(self, symbol, modifiers):
-        if not self.paused:
-            for game_object in self.game_objects:
-                if hasattr(game_object, "on_key_release"):
-                    game_object.on_key_release(symbol, modifiers)
+        self.active_scene.on_key_release(symbol, modifiers)
 
     def on_mouse_press(self, x, y, button, modifiers):
-        if not self.paused:
-            for game_object in self.game_objects:
-                if hasattr(game_object, "on_mouse_press"):
-                    game_object.on_mouse_press(x, y, button, modifiers)
+        self.active_scene.on_mouse_press(x, y, button, modifiers)

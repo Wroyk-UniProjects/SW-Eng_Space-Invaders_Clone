@@ -69,7 +69,7 @@ class Player(GameObject):
         if self.num_of_lives < 1:
             hitbox.debug_hitboxs.remove(self.hitbox)
             self.active = False
-            gamestate.set_game_lost()
+            GAm
             del self.sprite
             del self.hitbox
 
