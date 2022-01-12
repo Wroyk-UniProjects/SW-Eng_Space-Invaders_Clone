@@ -11,9 +11,12 @@ import hitbox
 import projectile
 from enemy import Enemy, EnemyMesh
 from gameobject import GameObject
+from gamescene import GameScene
 from hitbox import HitMask
 from centeredLabels import CenteredLabel
 from pyglet.window import key
+
+from mainscene import MainScene
 from player import Player
 from shields import shield
 from shields import shieldFactory
@@ -27,6 +30,8 @@ class GameBoard:
     window: Window = None
 
     game_objects = []
+
+    active_scene: GameScene = None
 
     gamestate = None
     StartingLabel: CenteredLabel = None
@@ -43,14 +48,13 @@ class GameBoard:
         self.window = window
         self.window.push_handlers(self)
         self.window.set_caption(game_name)
-
-        self.batch_onscreenStats = pyglet.graphics.Batch()
-
         self.alive = False
         self.paused = False
 
         self.target_ups = 120.0
         self.target_fps = 60.0
+
+        self.main_scene = MainScene(self.window.width, self.window.height)
 
         self.fps_display = FPSDisplay(window)
 
@@ -58,38 +62,13 @@ class GameBoard:
     def setup(self):
         # setup stuff
         #self.game_objects.append(RunningLabels(self.batch))
-        self.lable_game_paused = Label("Game Paused", font_name="monogramextended", font_size=64, x=self.window.width / 2,
-                                       y=self.window.height / 2, anchor_x='center', anchor_y='center')
-        #print(self.lable_game_paused)
-        #self.lable_game_paused.x -= self.lable_game_paused.width
-        #self.lable_game_paused.y -= self.lable_game_paused.height
 
-        self.game_objects.append(Player(50, 50, '../assets/player.png', self.batch))
+        self.main_scene.setup()
 
-        # adding multiple Enemies to game_objects
+        self.active_scene = self.main_scene
 
-        shieldsFactory = shieldFactory( self.batch)
-        shields_list = shieldsFactory.getShields()
-        self.game_objects = shields_list + self.game_objects
-
-        enemyMesh1 = EnemyMesh(6, self.batch)
-        enemy_list = enemyMesh1.getEnemyMesh()
-        player = Player(50, 50, '../assets/player.png', self.batch)
-
-       ###
-        # display player lives
-        self.StatsLabel = CenteredLabel(self.batch_onscreenStats)
-        self.game_objects.append(self.StatsLabel)
-        #life_left = player.num_of_lives
-        #life_counter = pyglet.text.Label('Lives remaining: ')
-
-        # player points - insert points gained in Julia's point system
-
-        # enemies remaining
-        ###
-
-        self.gamestate = gamestate(player, enemy_list)
-        self.game_objects.append(self.gamestate)
+        #self.gamestate = gamestate(player, enemy_list)
+        #self.game_objects.append(self.gamestate)
 
         self.StartingLabel = CenteredLabel(self.batch_startScreen)
         self.game_objects.append(self.StartingLabel)
@@ -100,18 +79,16 @@ class GameBoard:
         self.LoseLabel = CenteredLabel(self.batch_loseScreen)
         self.game_objects.append(self.LoseLabel)
 
-        self.game_objects.append(player)
-        self.game_objects += enemy_list
+        #self.game_objects.append(player)
+        #self.game_objects += enemy_list
         # projectile.spawn(self.window.width / 2, 0, HitMask.ENEMY, projectile.Direction.UP, self.batch)
-
-        self.scorecalc = Scorecalc(self.batch, self.gamestate.player, self.gamestate.enemiesArr)
-        self.game_objects.append(self.scorecalc)
 
     def render(self):
         self.window.clear()
 
-        self.batch.draw()
-        hitbox.debug_hitbox_batch.draw()
+        self.active_scene.batch.draw()
+        #self.batch.draw()
+        #hitbox.debug_hitbox_batch.draw()
 
         if self.paused:
             self.lable_game_paused.draw()
@@ -119,7 +96,6 @@ class GameBoard:
         self.fps_display.draw()
         self.window.flip()
 
-        self.batch_onscreenStats.draw()
 
     def renderStartScene(self):
         self.window.clear()
@@ -140,27 +116,12 @@ class GameBoard:
         self.window.flip()
 
     def update(self, dt: float):
-        # call update() Method from all GameObjects
-        for game_object in self.game_objects:
-            if hasattr(game_object, "update"):
-                game_object.update(dt)
 
-        # process active Projectiles
-        for current_projectile in projectile.active_projectiles:
-            current_projectile.update(dt)
-            for game_object in self.game_objects:
-
-                if hasattr(game_object, "hitbox") and current_projectile.is_colliding(game_object.hitbox):
-                    #print(f"{current_projectile}; {game_object}")
-                    current_projectile.on_collision()
-                    if hasattr(game_object, "on_collision"):
-                        game_object.on_collision()
-                    break
 
         self.gamestate.update(dt)
 
         enemy.shoot_cooldown -= dt
-        hitbox.debug_hitbox_update()
+        #hitbox.debug_hitbox_update()
 
     def remove_not_alive_enemies(self):
         while self.alive == 1:
