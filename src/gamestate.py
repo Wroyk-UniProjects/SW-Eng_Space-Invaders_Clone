@@ -1,14 +1,35 @@
 import json
+from enum import Enum
 
 from pyglet import resource
 from pyglet.window import key
 from pyglet.window import Window
-from player import Player
+#from player import Player
 from enemy import Enemy
 
 
+class GameStates(Enum):
+    LUNCHING = -2
+    EXIT = -1
+    ACTIVE = 1
+    PAUSED = 0
+    WON = 2
+    LOST = 3
+
+
+STATE: GameStates = GameStates.LUNCHING
+
+
+def set_game_won():
+    gamestate.STATE = GameStates.WON
+
+
+def set_game_lost():
+    gamestate.STATE = GameStates.LOST
+
+
 class gamestate:
-    player: Player = None
+    #player: Player = None
     enemiesArr = []
     gameStarted = None
     gameStopped = None
