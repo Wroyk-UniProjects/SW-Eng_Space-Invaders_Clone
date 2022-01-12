@@ -2,7 +2,8 @@ import time
 
 import pyglet
 from pyglet import clock
-from pyglet.window import Window, FPSDisplay
+from pyglet.text import Label
+from pyglet.window import Window, FPSDisplay, key
 
 import enemy
 import hitbox
@@ -45,6 +46,7 @@ class GameBoard:
         self.batch_onscreenStats = pyglet.graphics.Batch()
 
         self.alive = False
+        self.paused = False
 
         self.target_ups = 120.0
         self.target_fps = 60.0
@@ -54,6 +56,14 @@ class GameBoard:
 
     def setup(self):
         # setup stuff
+        #self.game_objects.append(RunningLabels(self.batch))
+        self.lable_game_paused = Label("Game Paused", font_name="monogramextended", font_size=64, x=self.window.width / 2,
+                                       y=self.window.height / 2, anchor_x='center', anchor_y='center')
+        print(self.lable_game_paused)
+        #self.lable_game_paused.x -= self.lable_game_paused.width
+        #self.lable_game_paused.y -= self.lable_game_paused.height
+
+        self.game_objects.append(Player(50, 50, '../assets/player.png', self.batch))
 
         # adding multiple Enemies to game_objects
 
@@ -101,6 +111,9 @@ class GameBoard:
 
         self.batch.draw()
         hitbox.debug_hitbox_batch.draw()
+
+        if self.paused:
+            self.lable_game_paused.draw()
 
         self.fps_display.draw()
         self.window.flip()
@@ -161,7 +174,8 @@ class GameBoard:
 
                 # physics loop
                 if time.time() - last_scheduled_update > 1.0 / self.target_ups:
-                    self.update(time.time() - last_scheduled_update)
+                    if not self.paused:
+                        self.update(time.time() - last_scheduled_update)
                     last_scheduled_update = time.time()
                 # rendering loop
                 if self.target_fps and time.time() - last_scheduled_frame > 1.0 / self.target_fps:
@@ -210,16 +224,25 @@ class GameBoard:
         self.alive = False
 
     def on_key_press(self, symbol, modifiers):
-        for game_object in self.game_objects:
-            if hasattr(game_object, "on_key_press"):
-                game_object.on_key_press(symbol, modifiers)
+        if symbol == key.P:
+            if self.paused:
+                self.paused = False
+            else:
+                self.paused = True
+
+        if not self.paused:
+            for game_object in self.game_objects:
+                if hasattr(game_object, "on_key_press"):
+                    game_object.on_key_press(symbol, modifiers)
 
     def on_key_release(self, symbol, modifiers):
-        for game_object in self.game_objects:
-            if hasattr(game_object, "on_key_release"):
-                game_object.on_key_release(symbol, modifiers)
+        if not self.paused:
+            for game_object in self.game_objects:
+                if hasattr(game_object, "on_key_release"):
+                    game_object.on_key_release(symbol, modifiers)
 
     def on_mouse_press(self, x, y, button, modifiers):
-        for game_object in self.game_objects:
-            if hasattr(game_object, "on_mouse_press"):
-                game_object.on_mouse_press(x, y, button, modifiers)
+        if not self.paused:
+            for game_object in self.game_objects:
+                if hasattr(game_object, "on_mouse_press"):
+                    game_object.on_mouse_press(x, y, button, modifiers)
