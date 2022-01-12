@@ -2,10 +2,10 @@ import pyglet
 from pyglet.sprite import Sprite
 from pyglet.window import key
 
-import gamestate
 import hitbox
 import projectile
 from gameobject import GameObject, GAMEOBJECTS
+from gamestate import GAME_STATE
 from hitbox import Hitbox, HitMask
 
 import time
@@ -69,7 +69,7 @@ class Player(GameObject):
         if self.num_of_lives < 1:
             hitbox.debug_hitboxs.remove(self.hitbox)
             self.active = False
-            GAm
+            GAME_STATE.set_game_lost()
             del self.sprite
             del self.hitbox
 

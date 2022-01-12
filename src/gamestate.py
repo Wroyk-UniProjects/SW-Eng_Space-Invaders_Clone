@@ -5,7 +5,7 @@ from pyglet import resource
 from pyglet.window import key
 from pyglet.window import Window
 # from player import Player
-from enemy import Enemy
+#from enemy import Enemy
 
 
 class GameStates(Enum):
@@ -26,6 +26,7 @@ class GameState:
     # gameWon = None
 
     state = GameStates.LUNCHING
+    score = 0
 
     # def __init__(self, player, enemies):
     # self.gameLost = False
