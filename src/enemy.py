@@ -6,6 +6,7 @@ import gameobject
 import projectile
 from gameobject import GameObject
 import hitbox
+from gamestate import GAME_STATE
 
 distanceMoveInFront = 10
 speedIncrementMovinginFront = 10
@@ -83,8 +84,8 @@ class Enemy(GameObject):
                     self.speed = self.speed + speedIncrementMovinginFront
                     self.sprite.update(y=self.y - distanceMoveInFront)
 
-                if (self.y <= 200):
-                    self.enemyDie()
+                if (self.y <= 150):
+                    GAME_STATE.set_game_lost()
 
             self.updateHitbox()
 

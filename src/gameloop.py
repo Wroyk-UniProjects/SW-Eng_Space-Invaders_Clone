@@ -2,39 +2,24 @@ import time
 from threading import Thread
 
 import pyglet
-from pyglet import clock
-from pyglet.text import Label
 from pyglet.window import Window, FPSDisplay, key
 
-import enemy
-import gamestate
 import hitbox
-import projectile
-from enemy import Enemy, EnemyMesh
-from gameobject import GameObject
 from gamescene import GameScene
-from hitbox import HitMask
 from centeredLabels import CenteredLabel
-from pyglet.window import key
-
 from mainscene import MainScene
-from player import Player
-from shields import shield
-from shields import shieldFactory
 from gamestate import GAME_STATE, GameStates
 from time import sleep
 
-from scorecalc import Scorecalc
-
-
 class GameBoard:
     window: Window = None
+    DEBUG = False
 
     game_objects = []
 
     active_scene: GameScene = None
 
-    gamestate = None
+    #gamestate = None
     StartingLabel: CenteredLabel = None
     StopLabel: CenteredLabel = None
     LoseLabel: CenteredLabel = None
@@ -49,6 +34,7 @@ class GameBoard:
         self.window = window
         self.window.push_handlers(self)
         self.window.set_caption(game_name)
+
         self.alive = False
         self.paused = False
 
@@ -88,13 +74,14 @@ class GameBoard:
         self.window.clear()
 
         self.active_scene.batch.draw()
-        #self.batch.draw()
-        #hitbox.debug_hitbox_batch.draw()
 
-        if self.paused:
-            self.lable_game_paused.draw()
+        if GAME_STATE.state == GameStates.PAUSED:
+            self.active_scene.paused_batch.draw()
 
-        self.fps_display.draw()
+        if self.DEBUG:
+            self.fps_display.draw()
+            hitbox.debug_hitbox_batch.draw()
+
         self.window.flip()
 
 
@@ -121,8 +108,8 @@ class GameBoard:
         self.active_scene.update(dt)
         #self.gamestate.update(dt)
 
-        enemy.shoot_cooldown -= dt
-        #hitbox.debug_hitbox_update()
+        if self.DEBUG:
+            hitbox.debug_hitbox_update()
 
     def remove_not_alive_enemies(self):
         while GAME_STATE.state != GameStates.EXIT:

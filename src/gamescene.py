@@ -5,13 +5,19 @@ import pyglet
 
 class GameScene(ABC):
     batch = None
+    paused_batch = None
     game_object = []
 
     width: int = 0
     height: int = 0
 
     def __init__(self, width, height):
+        self.game_objects = []
         self.batch = pyglet.graphics.Batch()
+        self.paused_batch = pyglet.graphics.Batch()
+
+        self.width = width
+        self.height = height
 
     @abstractmethod
     def setup(self):
