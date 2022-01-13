@@ -9,10 +9,11 @@ from pyglet.window import Window
 
 
 class GameStates(Enum):
-    LUNCHING = -2
-    EXIT = -1
-    ACTIVE = 1
+    EXIT = -3
+    RELAUNCHING = -2
+    LAUNCHING = -1
     PAUSED = 0
+    ACTIVE = 1
     WON = 2
     LOST = 3
 
@@ -25,7 +26,7 @@ class GameState:
     # gameLost = None
     # gameWon = None
 
-    state = GameStates.LUNCHING
+    state = GameStates.LAUNCHING
     score = 0
 
     # def __init__(self, player, enemies):

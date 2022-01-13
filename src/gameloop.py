@@ -5,6 +5,7 @@ import pyglet
 from pyglet.window import Window, FPSDisplay, key
 
 import hitbox
+from endscene import EndScene
 from gamescene import GameScene
 from centeredLabels import CenteredLabel
 from mainscene import MainScene
@@ -46,31 +47,18 @@ class GameBoard:
 
         self.main_scene = MainScene(self.window.width, self.window.height)
         self.start_menu = StartMenu(self.window.width, self.window.height, "SW-Eng_Space-Invaders")
+        self.end_scene = EndScene(self.window.width, self.window.height)
 
         self.fps_display = FPSDisplay(window)
 
     def setup(self):
         # setup stuff
 
-        # self.game_objects.append(RunningLabels(self.batch))
-        # projectile.spawn(self.window.width / 2, 0, HitMask.ENEMY, projectile.Direction.UP, self.batch)
-
         self.main_scene.setup()
         self.start_menu.setup()
+        self.end_scene.setup()
 
         self.active_scene = self.start_menu
-
-        # self.gamestate = gamestate(player, enemy_list)
-        # self.game_objects.append(self.gamestate)
-
-        self.StartingLabel = CenteredLabel(self.batch_startScreen)
-        self.game_objects.append(self.StartingLabel)
-
-        self.StopLabel = CenteredLabel(self.batch_stopScreen)
-        self.game_objects.append(self.StopLabel)
-
-        self.LoseLabel = CenteredLabel(self.batch_loseScreen)
-        self.game_objects.append(self.LoseLabel)
 
     def render(self):
         self.window.clear()
@@ -86,24 +74,6 @@ class GameBoard:
 
         self.window.flip()
 
-    def renderStartScene(self):
-        self.window.clear()
-        self.StartingLabel.createLabel('Press ENTER to start the game...')
-        self.batch_startScreen.draw()
-        self.window.flip()
-
-    def renderStopScene(self):
-        self.window.clear()
-        self.StopLabel.createLabel('The game has been stopped...')
-        self.batch_stopScreen.draw()
-        self.window.flip()
-
-    def renderLoseScene(self):
-        self.window.clear()
-        self.LoseLabel.createLabel('The player has died... Game over!')
-        self.batch_loseScreen.draw()
-        self.window.flip()
-
     def update(self, dt: float):
 
         self.active_scene.update(dt)
@@ -116,7 +86,7 @@ class GameBoard:
 
     def remove_not_active_game_object(self):
         while GAME_STATE.state != GameStates.EXIT:
-            if GAME_STATE.state != GameStates.ACTIVE:
+            if GAME_STATE.state == GameStates.ACTIVE:
 
                 for game_object in self.active_scene.game_objects:
                     if hasattr(game_object, "active") and not game_object.active:
@@ -147,38 +117,6 @@ class GameBoard:
                 elif self.target_fps is None:
                     self.render()
 
-                # if self.gamestate.checkIfGameStarted() and not self.gamestate.checkIfGameStopped() and not self.gamestate.getLoseStatus():
-
-                # physics loop
-                #    if time.time() - last_scheduled_update > 1.0 / self.target_ups:
-                #        if not self.paused:
-                #            self.update(time.time() - last_scheduled_update)
-                #        last_scheduled_update = time.time()
-                # rendering loop
-                #    if self.target_fps and time.time() - last_scheduled_frame > 1.0 / self.target_fps:
-                #        self.render()
-                #        last_scheduled_frame = time.time()
-                #    elif self.target_fps is None:
-                #        self.render()
-
-                # elif self.gamestate.checkIfGameStopped():
-
-                #    self.renderStopScene()
-                #    sleep(2)
-                #    self.alive = False
-
-                # elif not self.gamestate.player.active:  # <--
-
-                #    self.renderLoseScene()
-                #    sleep(3)
-                #    self.alive = False
-
-                # elif self.gamestate.gameWon:  # <--
-                #    pass
-
-                # else:
-                #    self.renderStartScene()
-
                 event = self.window.dispatch_events()
 
             except KeyboardInterrupt:
@@ -204,12 +142,23 @@ class GameBoard:
             self.active_scene = self.main_scene
             GAME_STATE.set_game_state(GameStates.ACTIVE)
 
-        elif GAME_STATE.state == GameStates.LUNCHING:
+        elif GAME_STATE.state == GameStates.LAUNCHING:
+            GAME_STATE.set_game_state(GameStates.PAUSED)
+            self.active_scene = self.start_menu
+            GAME_STATE.set_game_state(GameStates.LAUNCHING)
+
+        elif GAME_STATE.state == GameStates.RELAUNCHING:
             GAME_STATE.set_game_state(GameStates.PAUSED)
 
-            GAME_STATE.set_game_state(GameStates.LUNCHING)
+            self.main_scene = MainScene(self.window.width, self.window.height)
+            self.main_scene.setup()
+
+            self.active_scene = self.main_scene
+            GAME_STATE.set_game_state(GameStates.ACTIVE)
 
         elif GAME_STATE.state == GameStates.WON or GAME_STATE.state == GameStates.LOST:
+            state = GAME_STATE.state
             GAME_STATE.set_game_state(GameStates.PAUSED)
-
-            GAME_STATE.set_game_state(GameStates.ACTIVE)
+            self.end_scene.show_game_over_text(state)
+            self.active_scene = self.end_scene
+            GAME_STATE.set_game_state(state)
