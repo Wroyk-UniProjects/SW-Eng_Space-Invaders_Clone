@@ -28,6 +28,7 @@ class GameState:
 
     state = GameStates.LAUNCHING
     score = 0
+    leaderboard: dict = {}
 
     # def __init__(self, player, enemies):
     # self.gameLost = False
@@ -46,6 +47,25 @@ class GameState:
 
     def set_game_state(self, state: GameStates):
         self.state = state
+
+    def load_leaderboard(self):
+        json_data = json.load(resource.file('leaderboard.json'))
+        self.leaderboard = json_data
+        return json_data
+
+    def save_leaderboard(self, name):
+        if name not in self.leaderboard.keys() or self.leaderboard.get(name) < self.score:
+            self.leaderboard[name] = self.score
+
+        self.leaderboard = {k: v for k, v in reversed(sorted(self.leaderboard.items(), key=lambda item: item[1]))}
+
+        json_string = json.dumps(self.leaderboard, indent=3)
+
+        with open("../assets/leaderboard.json", "w") as file:
+            file.write(json_string)
+            file.close()
+
+
 
     def on_key_press(self, symbol, modifiers):
         if symbol is key.RETURN or symbol is key.ENTER:

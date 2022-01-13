@@ -63,6 +63,9 @@ class GameBoard:
         self.start_menu.setup()
         self.end_scene.setup()
 
+        GAME_STATE.load_leaderboard()
+        #print(GAME_STATE.leaderboard)
+
         self.active_scene = self.start_menu
 
     def render(self):
@@ -127,6 +130,7 @@ class GameBoard:
             except KeyboardInterrupt:
                 self.on_close()
                 sleep(0.001)
+
         garbage_collector.join()
 
     def on_close(self):
