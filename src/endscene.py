@@ -1,7 +1,9 @@
+import pyglet
+from pyglet.sprite import Sprite
 from pyglet.text import Label
 from pyglet.window import key
 
-from gameobject import UI
+from gameobject import UI, BACKGROUND
 from gamescene import GameScene
 from gamestate import GAME_STATE, GameStates
 
@@ -66,8 +68,38 @@ class EndScene(GameScene):
                            group=UI,
                            batch=self.batch)
 
+        bg_image = pyglet.image.load("../assets/bg.png")
+        self.lb_bg = Sprite(bg_image, x=0, y=0, batch=self.paused_batch, group=BACKGROUND)
+
+        lb = Label("Leaderboard",
+                   font_name="monogramextended",
+                   font_size=64,
+                   x=self.width / 2,
+                   y=self.height - 50,
+                   anchor_x='center',
+                   anchor_y='center',
+                   group=UI,
+                   batch=self.paused_batch)
+
     def update(self, dt):
         pass
+
+    def show_top10(self):
+        names = GAME_STATE.leaderboard.keys()
+        scores = GAME_STATE.leaderboard.values()
+        for i in range(10):
+            if i >= len(GAME_STATE.leaderboard):
+                break
+
+            entry = Label(f"{names[i]}:  {scores[i]}",
+                       font_name="monogramextended",
+                       font_size=40,
+                       x=self.width / 2,
+                       y=self.height - 200 - 22*i,
+                       anchor_y='center',
+                       group=UI,
+                       batch=self.paused_batch)
+
 
     def on_key_press(self, symbol, modifiers):
 
