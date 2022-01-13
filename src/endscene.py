@@ -14,6 +14,7 @@ class EndScene(GameScene):
         super(EndScene, self).__init__(width, height)
         self.max_chars = 5
         self.chars_number = self.max_chars
+        self.state = None
 
     def setup(self):
         self.game_over = Label("Game Over",
@@ -119,10 +120,15 @@ class EndScene(GameScene):
                 GAME_STATE.save_leaderboard(self.input_text)
 
             GAME_STATE.set_game_state(GameStates.EXIT)
-
+        elif symbol is key.SPACE and modifiers is key.MOD_CTRL:
+            if GAME_STATE.state == GameStates.PAUSED:
+                GAME_STATE.set_game_state(self.state)
+            else:
+                GAME_STATE.set_game_state(GameStates.PAUSED)
+                self.show_top10()
         else:
             try:
-                if self.chars_number > 0:
+                if self.chars_number > 0 and not modifiers:
                     char = chr(symbol)
                     index = self.max_chars - self.chars_number
 
@@ -151,6 +157,23 @@ class EndScene(GameScene):
         self.score.text = f"{GAME_STATE.score}"
         if state == GameStates.WON:
             self.game_over.text = "You Won"
+            self.state = GameStates.WON
         elif state == GameStates.LOST:
             self.game_over.text = "Game Over"
+            self.state = GameStates.LOST
 
+    def show_top10(self):
+        names = list(GAME_STATE.leaderboard.keys())
+        scores = list(GAME_STATE.leaderboard.values())
+        for i in range(10):
+            if i >= len(GAME_STATE.leaderboard):
+                break
+
+            entry = Label(f"{names[i]}:  {scores[i]}",
+                          font_name="monogramextended",
+                          font_size=32,
+                          x=self.width / 2 - 150,
+                          y=self.height - 200 - 36 * i,
+                          anchor_y='center',
+                          group=UI,
+                          batch=self.paused_batch)
