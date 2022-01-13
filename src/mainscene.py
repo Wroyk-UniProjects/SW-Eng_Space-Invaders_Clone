@@ -82,6 +82,10 @@ class MainScene(GameScene):
             else:
                 self.paused = True
                 GAME_STATE.set_game_state(GameStates.PAUSED)
+        elif symbol is key.PAGEUP:
+            GAME_STATE.set_game_won()
+        elif symbol is key.PAGEDOWN:
+            GAME_STATE.set_game_lost()
 
         if not self.paused:
             for game_object in self.game_objects:
